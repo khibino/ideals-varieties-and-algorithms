@@ -5,7 +5,7 @@ targets = \
 	sec1-2-s5.html
 
 md_format = \
-	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars
+	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars+latex_macros
 
 slide_opts = \
 	--standalone --self-contained --slide-level=2 \

@@ -2,7 +2,8 @@
 
 targets = \
 	sec1-1-s5.html \
-	sec1-2-s5.html
+	sec1-2-s5.html \
+	sec1-3-s5.html
 
 md_format = \
 	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars+latex_macros

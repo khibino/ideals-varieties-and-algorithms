@@ -10,6 +10,7 @@ md_format = \
 
 slide_opts = \
 	--standalone --self-contained --slide-level=2 \
+	--latexmathml \
 	--incremental
 
 

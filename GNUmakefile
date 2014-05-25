@@ -6,7 +6,8 @@ targets = \
 	sec1-2-s5.html \
 	sec1-2-s5-gl.html \
 	sec1-3-s5.html \
-	sec1-3-s5-gl.html
+	sec1-3-s5-gl.html \
+	sec1-4-s5-gl.html
 
 
 md_format = \
@@ -18,8 +19,8 @@ math_opt = --latexmathml
 
 slide_opts = \
 	--standalone --self-contained --slide-level=2 \
-	$(math_opt) \
-	--incremental
+	$(math_opt)
+##	--incremental
 
 glad_imaged = images
 

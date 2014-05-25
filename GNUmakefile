@@ -1,11 +1,8 @@
 
 
 targets = \
-	sec1-1-s5.html \
 	sec1-1-s5-gl.html \
-	sec1-2-s5.html \
 	sec1-2-s5-gl.html \
-	sec1-3-s5.html \
 	sec1-3-s5-gl.html \
 	sec1-4-s5-gl.html
 

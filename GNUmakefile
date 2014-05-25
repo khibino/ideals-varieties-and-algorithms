@@ -64,9 +64,7 @@ codeCount.table.in:
 
 clean:
 	$(RM) $(targets)
+	$(RM) -r $(glad_imaged)
 ##	$(RM) *.dvi *.pdf
 ##	$(RM) *.aux *.log *.nav *.out *.snm *.toc *.vrb
 ##	$(RM) codeCount.table
-
-veryclean: clean
-	$(RM) -r $(glad_imaged)

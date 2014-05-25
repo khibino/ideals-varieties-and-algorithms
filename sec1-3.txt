@@ -8,7 +8,7 @@
 
 第1章 - §3 - 演習問題 - 3.
 -----
-$\mathbb{V}(y - f(x))$ は $y - f(x) = 0$ を見たす点の集合なので、
+${\bf V}(y - f(x))$ は $y - f(x) = 0$ を見たす点の集合なので、
 $x = t$ とすれば $y = f(t)$
 
 
@@ -29,25 +29,36 @@ x軸に対して線対称になっていることがわかる。
 第1章 - §3 - 演習問題 - 9. a.
 -----
 この式を変形してゆくと、
+
 $$y^2 = a^2 \tan(t)^2(1 + \sin(t))^2$$
+
 $$y^2 = a^2 \frac{\sin^2 t}{\cos^2 t}(1 + \sin(t))^2$$
+
 $$y^2 = \frac{a^2\sin^2 t\cdot a^2(1 + \sin t)^2}{a^2(1 - \sin^2 t)}$$
-$$y^2 = \frac{a^2\sin^2 t (a + a\sin t)^2}{(a^2 - a^2\sin^2 t)}$$
-$$y^2 = \frac{x^2 (a + x)^2}{(a^2 - x^2)}$$
+
+$$y^2 = \frac{a^2\sin^2 t (a + a\sin t)^2}{a^2 - a^2\sin^2 t}$$
+
+$$y^2 = \frac{x^2 (a + x)^2}{a^2 - x^2}$$
+
 よって、
-$$\frac{x^2 (a + x)^2}{(a - x^2)} - y^2 = 0$$ が得られた。
+
+$$\frac{x^2 (a + x)^2}{a - x^2} - y^2 = 0$$ が得られた。
 
 第1章 - §3 - 演習問題 - 9. b.
 -----
 $$(-\frac{3}{2}\pi < t < -\frac{\pi}{2}, -\frac{\pi}{2} < t < \frac{\pi}{2})$$
 のもとで三角関数にパラメータ付けする。
-(0, 1), (u, 0)を結ぶ直線と原点中心の半径1の交点によるパラメータ付けを利用すると、
+$(0, 1)$, $(u, 0)$ を結ぶ直線と原点中心の半径1の交点によるパラメータ付けを利用すると、
+
 $$\cos t = -\frac{2u}{1+u^2}$$
+
 $$\sin t = -\frac{1-u^2}{1+u^2}$$
+
 $$\tan t =  \frac{1-u^2}{2u}$$
+
 と置くことができる。
 
-($u \to -\infty と t \to -\frac{3}{2}\pi$, $u \to \infty と t \to \frac{\pi}{2}$
+($u \to -\infty$ と $t \to -\frac{3}{2}\pi$, $u \to \infty$ と $t \to \frac{\pi}{2}$
 がそれぞれ対応)
 したがって、
 $$x = -a\cdot\frac{1-u^2}{1+u^2}$$
@@ -59,13 +70,11 @@ $$y = -a\cdot\frac{u(1-u^2)}{1+u^2}$$
 
 $x_n$, $y_n$ の係数がそれぞれ同じなので、
 
-<!-- $\left(\begin{array}{c} x \\ y \end{array}\right)$ -->
-
-$\left(\begin{array}{c}x\\y\end{array}\right)
+$$\left(\begin{array}{c}x\\y\end{array}\right)
   =   (1-t)^3\left(\begin{array}{c}x_0\\y_0\end{array}\right)
   + 3t(1-t)^2\left(\begin{array}{c}x_1\\y_1\end{array}\right)
   + 3t^2(1-t)\left(\begin{array}{c}x_2\\y_2\end{array}\right)
-  + t^3\left(\begin{array}{c}x_3\\y_3\end{array}\right)$
+  + t^3\left(\begin{array}{c}x_3\\y_3\end{array}\right)$$
 
 第1章 - §3 - 演習問題 - 15. b.
 -----

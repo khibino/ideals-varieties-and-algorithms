@@ -21,8 +21,9 @@ slide_opts = \
 
 glad_imaged = images
 
-%-gl.html: %-gl.htex
+$(glad_imaged)/%-s5-gl %-gl.html: %-gl.htex
 	mkdir -p $(glad_imaged)
+	$(RM) -fr $(glad_imaged)/$(shell basename $@ .html)
 	gladtex -r 200 -d $(glad_imaged)/$(shell basename $@ .html) $<
 
 %-s5.html: %.txt

@@ -97,6 +97,13 @@ $h \in k[x_1,...,x_n]$ に対して、$h(a_1,...,a_n)\cdot f(a_1,...,a_n) = h(a_
 第1章 - §4 - 演習問題 - 15.
 -----
 
-b. $\mathbb{R}^2$上に$x - y = 0, (x, y) \neq (1, 1)$となるような無限個の解を持たねばならないので、 ${\bf I(X)} = <0>$ (零多項式のみからなるイデアル)
+b. $<x - y>$ を考えると、$\forall h \in k[x, y], \forall(x, y) \in X, h\cdot (x - y) = 0$
+なので $<x, y>\subset {\bf I}(X)$。
+
+また、$f \in k[x, y], {\bf I}(X)$ を考えると、$f = h(x - y) + r$ の形で書き表すことができ、$h \in k[x, y]$、$r \in k[y]$ である。
+ところで、$f \in {\bf I}(X)$ は $\forall a \in k, a \neq 1$ において、$f(a, a) = h(a, a)(a - a) + r(a) = 0$ となるはずなので、多項式r(y) は無限個の根を持つことになり、零多項式である。
+よって、$f \in {\bf I}(X)$ は $f(x, y) = h(x, y)(x - y)$ の形をしていることが示された。つまり $<x, y>\supset {\bf I}(X)$ である。
+
+$<x, y>\subset {\bf I}(X)$ かつ $<x, y>\supset {\bf I}(X)$ が示されたので、 $<x, y> = {\bf I}(X)$ である。
 
 c. $\mathbb{C}^n$上に全ての整数点の無限個の解を持たねばならないので、${\bf I}(\mathbb{Z}^n) = <0>$

@@ -4,11 +4,12 @@ targets = \
 	sec1-1-s5-gl.html \
 	sec1-2-s5-gl.html \
 	sec1-3-s5-gl.html \
-	sec1-4-s5-gl.html
+	sec1-4-s5-gl.html \
+	sec1-5-s5-gl.html
 
 
 md_format = \
-	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars+latex_macros
+	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars+latex_macros+fenced_code_blocks
 
 math_opt = --latexmathml
 #math_opt = --jsmath
@@ -24,7 +25,7 @@ glad_imaged = images
 $(glad_imaged)/%-s5-gl %-gl.html: %-gl.htex
 	mkdir -p $(glad_imaged)
 	$(RM) -fr $(glad_imaged)/$(shell basename $@ .html)
-	gladtex -r 200 -d $(glad_imaged)/$(shell basename $@ .html) $<
+	gladtex -r 160 -d $(glad_imaged)/$(shell basename $@ .html) $<
 
 %-s5.html: %.txt
 	pandoc -f $(md_format) -t s5 $(slide_opts) -o $@ $<

@@ -7,11 +7,11 @@
 -----
 $f g \in k[x,y]$ について、$x = f\cdot g$ となるのものを考える。
 
-$x$ の次数で整理した式を考え、その最高次数を $deg_x$ とする。
+$x$ の次数で整理した式を考え、その最高次数を $\deg_x$ とする。
 すると、
 
-$deg_x(x) = deg_x(f) + deg_x(g) = 1$ なので、
-$(deg_x(f), deg_x(g)) = (1, 0) または  (0, 1) $ である。
+$\deg_x(x) = \deg_x(f) + \deg_x(g) = 1$ なので、
+$(\deg_x(f), \deg_x(g)) = (1, 0) または  (0, 1) $ である。
 
 したがって、$f, g$ は $\alpha, \beta, \gamma \in k[y]$ を使って、
 $f = \alpha(y) x + \beta(y), g = \gamma(y)$ の形に表現できることになる($f, g$ 逆の形も同様)。
@@ -27,7 +27,7 @@ $x = fg = \alpha(y)\gamma(y)x + \beta(y)\gamma(y)$
 $x$の項の係数とその$y$の次数を考えると、
 
 $1 = \alpha(y)\gamma(y)$ かつ、
-$deg(1) = deg(\alpha(y)\gamma(y)) = deg(\alpha(y)) + deg(\gamma(y)) = 0$
+$\deg(1) = \deg(\alpha(y)\gamma(y)) = \deg(\alpha(y)) + \deg(\gamma(y)) = 0$
 なので $\alpha(y),\gamma(y)$ ともに定数かつ $\alpha(y)\neq 0, \gamma(y)\neq 0$ である。
 
 xの多項式の定数項を考えれば、

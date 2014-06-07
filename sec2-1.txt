@@ -15,9 +15,9 @@ $${}_{m}H_3 = {}_{m+2}C_2 = \frac{(m+2)(m+1)}{2}$$
 $f, g$ の $t$ についての次数は高々 $n$ かつ、$u + v \le m$ から、
 $\deg(f(t)^ug(t)^v) = \deg(f(t))\cdot u + \deg(g(t))\cdot v \le n(u + v) \le nm$
 
-また、$f(t)^ug(t)^v$ は t の多項式なので、
-$\vec{a}\cdot (t^{nm}, t^{nm-1}, \dots, 1), ( \vec{a} = (a_{nm}, a_{nm-1}, \dots, a_0) \in k^{nm+1})$ の形で表現できる。
+よって $f(t)^ug(t)^v$ は高々$nm$次の$t$の多項式なので、
+$\vec{a_{u,v}} = (a_{nm}, a_{nm-1}, \dots, a_0) \in k^{nm+1}$ において、 $\vec{a_{u,v}}\cdot (t^{nm}, t^{nm-1}, \dots, 1)$ の形で表現できる。
 
-それぞれの$f, g$ の単項式 $f(t)^ug(t)^v, (u + v \le m)$ について、$\vec{a_{uv}} \in k^{nm+1}$ があることになる。
-小問a. から $| \{ \vec{a_{uv}} | \vec{a_{uv}} \in k^{nm+1} \} | = \frac{(m+2)(m+1)}{2}$ であり、
-$m$ が十分に大きいときには $nm + 1 < \frac{(m+2)(m+1)}{2}$ が成立するので、$\vec{a_{uv}}$ は線形従属になる。
+このとき、それぞれの$f, g$ の単項式 $f(t)^ug(t)^v, (u + v \le m)$ について、$\vec{a_{u,v}} \in k^{nm+1}$ があることになる。
+小問a. から $| \{ \vec{a_{u,v}} | \vec{a_{u,v}} \in k^{nm+1} \} | = \frac{(m+2)(m+1)}{2}$ であり、
+$m$ が十分に大きいときには $nm + 1 < \frac{(m+2)(m+1)}{2}$ が成立するので、$\vec{a_{u,v}}$ は線形従属になる。

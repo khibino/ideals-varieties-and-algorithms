@@ -1,0 +1,44 @@
+% グレブナ規定と代数多様体入門
+% 2014-06-16
+% 第2章 - §2 - 演習問題 - @khibino
+
+
+第2章 - §2 - 演習問題 - 4.
+-----
+$>_{grlex}$ について、定義1の3条件を示す。
+
+第2章 - §2 - 演習問題 - 4. (i).
+-----
+(i). $>_{grlex}$ が線形順序であることを示す。
+
+全次数で場合分けして考えれば、
+
+$$|\alpha| > |\beta| \Rightarrow \alpha >_{grlex} \beta$$
+
+$$|\alpha| < |\beta| \Rightarrow \alpha <_{grlex} \beta$$
+
+$$|\alpha| = |\beta|
+  \Rightarrow \left\{\begin{array}{l}
+                \alpha >_{lex} \beta \Rightarrow \alpha >_{grlex} \beta \\
+                \alpha = \beta \\
+                \alpha <_{lex} \beta \Rightarrow \alpha <_{grlex} \beta \\
+              \end{array}\right. $$
+
+
+第2章 - §2 - 演習問題 - 4. (ii).
+-----
+(ii). $\alpha, \beta, \gamma \in \mathbb{Z}^n_{\ge 0}, \alpha >_{grlex} \beta \Rightarrow \alpha + \gamma >_{grlex} \beta + \gamma$ を示す。
+
+$$|\alpha| > |\beta|$$のとき、
+
+$$  \Rightarrow  |\alpha| + |\gamma| > |\beta| + |\gamma| $$
+
+$$  \Rightarrow  |\alpha + \gamma| > |\beta + \gamma| $$
+
+$$  \Rightarrow  \alpha + \gamma >_{grlex} \beta + \gamma $$
+
+
+$$|\alpha| = |\beta|$$のとき、
+
+第2章 - §2 - 演習問題 - 10.
+-----

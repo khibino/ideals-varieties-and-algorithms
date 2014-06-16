@@ -29,16 +29,44 @@ $$|\alpha| = |\beta|
 -----
 (ii). $\alpha, \beta, \gamma \in \mathbb{Z}^n_{\ge 0}, \alpha >_{grlex} \beta \Rightarrow \alpha + \gamma >_{grlex} \beta + \gamma$ を示す。
 
-$$|\alpha| > |\beta|$$のとき、
+$\alpha >_{grlex} \beta$ を $|\alpha| > |\beta|$ と
+$|\alpha| = |\beta| \wedge \alpha >_{grlex} \beta$ に場合分けして考える。
 
-$$  \Rightarrow  |\alpha| + |\gamma| > |\beta| + |\gamma| $$
+$|\alpha| > |\beta|$のとき、
 
-$$  \Rightarrow  |\alpha + \gamma| > |\beta + \gamma| $$
+$$ \Rightarrow  |\alpha| + |\gamma| > |\beta| + |\gamma| $$
 
-$$  \Rightarrow  \alpha + \gamma >_{grlex} \beta + \gamma $$
+$$ \Rightarrow  |\alpha + \gamma| > |\beta + \gamma| $$
+
+$$ \Rightarrow  \alpha + \gamma >_{grlex} \beta + \gamma $$
 
 
-$$|\alpha| = |\beta|$$のとき、
+第2章 - §2 - 演習問題 - 4. (ii).
+-----
+$\alpha >_{grlex} \beta$ を $|\alpha| > |\beta|$ と
+$|\alpha| = |\beta| \wedge \alpha >_{grlex} \beta$ に場合分けして考える。
+
+$|\alpha| = |\beta| \wedge \alpha >_{grlex} \beta$ とき、
+
+$$ \Rightarrow \alpha >_{lex} \beta $$
+
+$$ \Rightarrow \alpha_i - \beta_i = 0\ (i = 1,..,k-1), \alpha_k - \beta_k > 0 $$
+
+$$ \Rightarrow (\alpha_i + \gamma_i) - (\beta_i + \gamma_i) = 0\ (i = 1,..,k-1), (\alpha_k + \gamma_k) - (\beta_k + \gamma_k) > 0 $$
+
+$$ \Rightarrow \alpha + \gamma >_{lex} \beta + \gamma \wedge |\alpha + \gamma| = |\beta + \gamma| $$
+
+$$ \Rightarrow \alpha + \gamma >_{grlex} \beta + \gamma $$
+
+第2章 - §2 - 演習問題 - 4. (iii).
+-----
+(iii). $>_{grlex}$ が整列順序であることを示す。
+
+$>_{grlex}$ が整列順序でないとする。補題2から、$\mathbb{Z}^n_{\ge 0}$ 上の狭義減少の無限列 $\alpha(1) >_{grlex} \alpha(2) >_{grlex} \alpha(3) >_{grlex} \dots $ が存在することになる。
+
+この無限列の全次数を考えると、$|\alpha(1)| \ge |\alpha(2)| \ge |\alpha(3)| \ge \dots$ ある整数 k があって $i \le k$ において $|\alpha(i)|$ が全て等しくならなければならない。この値を $v=|\alpha(i)|$ としたとき、全次数が $v$ となるような $\alpha(i)$ は有限個しかありえない。$\alpha(i)$ は狭義減少の列で全て異なるはずなので、これは $\alpha(i)$ が無限列であることに反する。
+
 
 第2章 - §2 - 演習問題 - 10.
 -----
+$\mathbb{Z}^n_{\ge 0}$ の単項式順序においてもいつでも正しい(有限個しかない)。なぜなら補題2から、$\mathbb{Z}^n_{\ge 0}$ 上の2つの元の間にある元による集合を考えたとき、その中の狭義減少列が必ず有限個になるからである。$>_{grlex}$ は演習問題4の結果から単項式順序なので、やはり成立する。

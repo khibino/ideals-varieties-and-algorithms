@@ -1,0 +1,46 @@
+<!-- % グレブナ規定と代数多様体入門 -->
+<!-- % 2014-06-16 -->
+<!-- % 第2章 - §3 - 演習問題 - @khibino -->
+
+
+第2章 - §3 - 演習問題 - 4.
+-----
+割り算アルゴリズムと順序から、各$f_i$について、最初に割り算ステップを行なった商の項は $\mathrm{LT}(a_i)$ である。
+
+したがって、$\mathrm{multideg}(\mathrm{LT}(a_i)f_i) \le \mathrm{multideg}(f)$
+
+また、
+
+$$\ \mathrm{multideg}(\mathrm{LT}(a_i)f_i)$$
+
+$$= \mathrm{multideg}(\mathrm{LT}(a_i)\mathrm{LT}(f_i))$$
+
+$$= \mathrm{multideg}(\mathrm{LT}(a_if_i))$$
+
+$$= \mathrm{multideg}(a_if_i)$$
+
+であるので、 $\mathrm{multideg}(a_if_i) \le \mathrm{multideg}(f)$ が示された。
+
+第2章 - §3 - 演習問題 - 9.a.
+-----
+$f\in \mathbb{R}[x,y,z]$ に対して、$y>z>x$ における $\mathrm{lex}$ 順序を使って割り算アルゴリズムを適用する。
+割り算アルゴリズムから、
+
+$$f = h_1 (y - x^2) + h_2 (z - x^3) +r$$ となる $h_1, h_2, r \in \mathbb{R}[x,y,z]$ が導出され、
+かつ $r$ は $\mathrm{LT}(y - x^2) = y$ でも $\mathrm{LT}(z - x^3) = z$ でも割ることができない。
+
+したがって、$r$ の $y$、$z$ の次数は 0 となり、$r$ は変数 $x$ だけの多項式となる。
+
+第2章 - §3 - 演習問題 - 9.b.
+-----
+捩れ3次曲線のパラメータ表示から、捩れ3次曲線上の任意の点は $(t, t^2, t^3)$ と表現できる。
+すると、
+
+$$z^2 - x^4y = (t^3)^2 - t^4t^2 = 0$$
+
+となるので、$z^2 - x^4y$ は捩れ3次曲線上の任意で 0 となる。
+
+第2章 - §3 - 演習問題 - 9.c.
+-----
+
+$z^2 - x^4y = - x^4(y - x^2) + (z + x^3)(z - x^3)$

@@ -1,6 +1,6 @@
-<!-- % グレブナ規定と代数多様体入門 -->
-<!-- % 2014-06-16 -->
-<!-- % 第2章 - §3 - 演習問題 - @khibino -->
+% グレブナ規定と代数多様体入門
+% 2014-06-16
+% 第2章 - §3 - 演習問題 - @khibino
 
 
 第2章 - §3 - 演習問題 - 4.
@@ -11,7 +11,7 @@
 
 また、
 
-$$\ \mathrm{multideg}(\mathrm{LT}(a_i)f_i)$$
+$$\ \ \mathrm{multideg}(\mathrm{LT}(a_i)f_i)$$
 
 $$= \mathrm{multideg}(\mathrm{LT}(a_i)\mathrm{LT}(f_i))$$
 

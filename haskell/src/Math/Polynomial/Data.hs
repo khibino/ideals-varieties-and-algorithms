@@ -317,15 +317,14 @@ applyDivisor' :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => (Term k n, Polynomial o k n)
              -> DivisionContext o k n
              -> (Maybe (), DivisionContext o k n)
-applyDivisor' (ltF', f') cont =
-  maybe (Nothing, cont) ((,) $ Just ()) $ do
-    let p = divisee cont
-    lt <- leadingTerm p
-    q  <- lt `termDiv` ltF'
-    let appendQ = insertWith (flip (<>)) f' (pure q)
-    return $ cont { divisee   =  p - mapPoly (q <>) f'
-                  , quotient  =  appendQ $ quotient cont
-                  }
+applyDivisor' (ltF', f') cont = maybe (Nothing, cont) ((,) $ Just ()) $ do
+  let p = divisee cont
+  lt <- leadingTerm p
+  q  <- lt `termDiv` ltF'
+  let appendQ = insertWith (flip (<>)) f' (pure q)
+  return $ cont { divisee   =  p - mapPoly (q <>) f'
+                , quotient  =  appendQ $ quotient cont
+                }
 
 applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => (Term k n, Polynomial o k n)

@@ -22,8 +22,9 @@ import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
 import Control.Arrow (second)
 import Control.Applicative ((<$>), pure, (<|>))
 import Control.Monad (msum)
+import Control.Monad.Trans.Class (lift)
 import Control.Monad.Trans.Maybe (MaybeT (..))
-import Control.Monad.Trans.State.Strict (State, state, execState)
+import Control.Monad.Trans.State.Strict (State, get, modify, execState)
 import Data.Monoid (Monoid(..), (<>))
 import Data.Function (on)
 import Data.Maybe (fromMaybe)
@@ -292,9 +293,8 @@ finalizeDTerms =  Polynomial . DList.toList
 
 type PolynomialDivision o k n = MaybeT (State (DivisionContext o k n))
 
-polynomialDivision :: (DivisionContext o k n -> (Maybe a, DivisionContext o k n))
-                   -> PolynomialDivision o k n a
-polynomialDivision =  MaybeT . state
+hoist :: Maybe a -> PolynomialDivision o k n a
+hoist =  MaybeT . return
 
 runPolynomialDivision :: Polynomial o k n
                       -> PolynomialDivision o k n a
@@ -305,31 +305,24 @@ runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
     (map (second finalizeDTerms) . reverse . Map.toList $ quotient c,
      finalizeDTerms $ remainder c)
 
-pushRemainder' :: DivisionContext o k n -> (Maybe (), DivisionContext o k n)
-pushRemainder' c = case polyUncons $ divisee c of
-  Nothing       -> (Nothing, c)
-  Just (lt, p') -> (Just (), c { divisee = p', remainder = remainder c <> pure lt })
-
 pushRemainder :: PolynomialDivision o k n ()
-pushRemainder =  polynomialDivision pushRemainder'
-
-applyDivisor' :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => (Term k n, Polynomial o k n)
-             -> DivisionContext o k n
-             -> (Maybe (), DivisionContext o k n)
-applyDivisor' (ltF', f') cont = maybe (Nothing, cont) ((,) $ Just ()) $ do
-  let p = divisee cont
-  lt <- leadingTerm p
-  q  <- lt `termDiv` ltF'
-  let appendQ = insertWith (flip (<>)) f' (pure q)
-  return $ cont { divisee   =  p - mapPoly (q <>) f'
-                , quotient  =  appendQ $ quotient cont
-                }
+pushRemainder = do
+  p         <-  divisee <$> lift get
+  (lt, p')  <-  hoist $ polyUncons p
+  lift $ modify (\c -> c { divisee = p', remainder = remainder c <> pure lt } )
 
 applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => (Term k n, Polynomial o k n)
              -> PolynomialDivision o k n ()
-applyDivisor =  polynomialDivision . applyDivisor'
+applyDivisor (ltF', f') = do
+  p  <-  divisee <$> lift get
+  q  <-  hoist $ do
+    lt <- leadingTerm p
+    lt `termDiv` ltF'
+  let appendQ = insertWith (flip (<>)) f' (pure q)
+  lift $ modify (\c -> c { divisee   =  p - mapPoly (q <>) f'
+                         , quotient  =  appendQ $ quotient c
+                         })
 
 divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => [Polynomial o k n]

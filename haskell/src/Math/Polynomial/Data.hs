@@ -359,7 +359,6 @@ polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => Polynomial o k n
             -> [Polynomial o k n]
             -> (PolyQuots o k n, Polynomial o k n)
-polyQuotRem f ds =
-  runPolynomialDivision f $ divisionLoop ds
+polyQuotRem f = runPolynomialDivision f . divisionLoop
 
 type Polynomial1 o k = Polynomial o k 1

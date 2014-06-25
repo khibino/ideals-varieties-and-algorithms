@@ -278,14 +278,14 @@ multiDegree :: Polynomial o k n -> Maybe (Degrees n)
 multiDegree =  (degrees <$>) . leadingMono
 
 
+type DTerms k n = DList (Term k n)
+
 data DivisionContext o k n =
   DivisionContext
   { divisee   :: !(Polynomial o k n)
-  , quotient  :: !(Map (Polynomial o k n) (DList (Term k n)))
-  , remainder :: !(DList (Term k n))
+  , quotient  :: !(Map (Polynomial o k n) (DTerms k n))
+  , remainder :: !(DTerms k n)
   }
-
-type DTerms k n = DList (Term k n)
 
 finalizeDTerms :: DTerms k n -> Polynomial o k n
 finalizeDTerms =  Polynomial . DList.toList

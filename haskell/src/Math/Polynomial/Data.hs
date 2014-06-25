@@ -331,10 +331,10 @@ applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              -> PolynomialDivision o k n ()
 applyDivisor =  polynomialDivision . applyDivisor'
 
-recDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-           => [Polynomial o k n]
-           -> PolynomialDivision o k n ()
-recDivisor dps' = rec'  where
+divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+             => [Polynomial o k n]
+             -> PolynomialDivision o k n ()
+divisionLoop dps' = rec'  where
   dps = prepareDivisors dps'
   rec' =
     do msum $ map applyDivisor dps
@@ -350,7 +350,7 @@ prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
                 -> [(Term k n, Polynomial o k n)]
 prepareDivisors ds' = dps  where
   ds =  sortBy (invCompare compare) $ filter (/= 0) ds'
-  lts = fromMaybe (error "Bug?: reading terms") $ mapM leadingTerm ds
+  lts = fromMaybe (error "Bug?: leading terms") $ mapM leadingTerm ds
   dps = zip lts ds
 
 type PolyQuots o k n = [(Polynomial o k n, Polynomial o k n)]
@@ -360,6 +360,6 @@ polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             -> [Polynomial o k n]
             -> (PolyQuots o k n, Polynomial o k n)
 polyQuotRem f ds =
-  runPolynomialDivision f $ recDivisor ds
+  runPolynomialDivision f $ divisionLoop ds
 
 type Polynomial1 o k = Polynomial o k 1

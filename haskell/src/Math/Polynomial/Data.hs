@@ -311,9 +311,9 @@ pushRemainder = do
   lift $ modify (\c -> c { divisee = p', remainder = remainder c <> pure lt } )
 
 applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => (Int, Term k n, Polynomial o k n)
+             => (Term k n, (Int, Polynomial o k n))
              -> PolynomialDivision o k n ()
-applyDivisor (ix, ltF', f') = do
+applyDivisor (ltF', (ix, f')) = do
   p  <-  divisee <$> lift get
   q  <-  hoist $ do
     lt <- leadingTerm p
@@ -324,7 +324,7 @@ applyDivisor (ix, ltF', f') = do
                          })
 
 divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => [(Int, Term k n, Polynomial o k n)]
+             => [(Term k n, (Int, Polynomial o k n))]
              -> PolynomialDivision o k n ()
 divisionLoop dps = rec'  where
   rec' =
@@ -338,11 +338,11 @@ divisionLoop dps = rec'  where
 
 prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
                 => [Polynomial o k n]
-                -> [(Int, Term k n, Polynomial o k n)]
+                -> [(Term k n, (Int, Polynomial o k n))]
 prepareDivisors ds' = dps  where
   ds =  sortBy (invCompare compare) $ filter (/= 0) ds'
   lts = fromMaybe (error "Bug?: leading terms") $ mapM leadingTerm ds
-  dps = zip3 [0..] lts ds
+  dps = zip lts $ zip [0..] ds
 
 type PolyQuots o k n = [(Polynomial o k n, Polynomial o k n)]
 
@@ -354,7 +354,7 @@ polyQuotRem f dps' = (merge qs' dps, r)
   where dps = prepareDivisors dps'
         (qs', r) = runPolynomialDivision f $ divisionLoop dps
         merge      []          _             =  []
-        merge qqs@((i, q):qs) ((j, _, d):ds)
+        merge qqs@((i, q):qs) ((_, (j, d)):ds)
           | i == j                      =  (d, q) : merge qs ds
           | i >  j                      =  merge qqs ds
           | otherwise                   =  error "Bug?: prepared divisors"

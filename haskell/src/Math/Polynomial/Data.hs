@@ -19,7 +19,6 @@ module Math.Polynomial.Data
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
-import Control.Arrow (second)
 import Control.Applicative ((<$>), pure, (<|>))
 import Control.Monad (msum)
 import Control.Monad.Trans.Class (lift)
@@ -29,8 +28,8 @@ import Data.Monoid (Monoid(..), (<>))
 import Data.Function (on)
 import Data.Maybe (fromMaybe)
 import Data.List (foldl', sortBy, groupBy)
-import Data.Map.Strict (Map, insertWith)
-import qualified Data.Map.Strict as Map
+import Data.IntMap.Strict (IntMap, insertWith)
+import qualified Data.IntMap.Strict as Map
 import Data.DList (DList)
 import qualified Data.DList as DList
 import Data.String (IsString (..))
@@ -284,7 +283,7 @@ type DTerms k n = DList (Term k n)
 data DivisionContext o k n =
   DivisionContext
   { divisee   :: !(Polynomial o k n)
-  , quotient  :: !(Map (Polynomial o k n) (DTerms k n))
+  , quotient  :: !(IntMap (DTerms k n))
   , remainder :: !(DTerms k n)
   }
 
@@ -298,11 +297,11 @@ hoist =  MaybeT . return
 
 runPolynomialDivision :: Polynomial o k n
                       -> PolynomialDivision o k n a
-                      -> ([(Polynomial o k n, Polynomial o k n)], Polynomial o k n)
+                      -> ([(Int, Polynomial o k n)], Polynomial o k n)
 runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
   is = DivisionContext { divisee = f, quotient = Map.empty, remainder = mempty }
   result c =
-    (map (second finalizeDTerms) . reverse . Map.toList $ quotient c,
+    ([(ix, finalizeDTerms q) | (ix, q) <- Map.toList $ quotient c],
      finalizeDTerms $ remainder c)
 
 pushRemainder :: PolynomialDivision o k n ()
@@ -312,23 +311,22 @@ pushRemainder = do
   lift $ modify (\c -> c { divisee = p', remainder = remainder c <> pure lt } )
 
 applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => (Term k n, Polynomial o k n)
+             => (Int, Term k n, Polynomial o k n)
              -> PolynomialDivision o k n ()
-applyDivisor (ltF', f') = do
+applyDivisor (ix, ltF', f') = do
   p  <-  divisee <$> lift get
   q  <-  hoist $ do
     lt <- leadingTerm p
     lt `termDiv` ltF'
-  let appendQ = insertWith (flip (<>)) f' (pure q)
+  let appendQ = insertWith (flip (<>)) ix (pure q)
   lift $ modify (\c -> c { divisee   =  p - mapPoly (q <>) f'
                          , quotient  =  appendQ $ quotient c
                          })
 
 divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => [Polynomial o k n]
+             => [(Int, Term k n, Polynomial o k n)]
              -> PolynomialDivision o k n ()
-divisionLoop dps' = rec'  where
-  dps = prepareDivisors dps'
+divisionLoop dps = rec'  where
   rec' =
     do msum $ map applyDivisor dps
        rec'
@@ -340,11 +338,11 @@ divisionLoop dps' = rec'  where
 
 prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
                 => [Polynomial o k n]
-                -> [(Term k n, Polynomial o k n)]
+                -> [(Int, Term k n, Polynomial o k n)]
 prepareDivisors ds' = dps  where
   ds =  sortBy (invCompare compare) $ filter (/= 0) ds'
   lts = fromMaybe (error "Bug?: leading terms") $ mapM leadingTerm ds
-  dps = zip lts ds
+  dps = zip3 [0..] lts ds
 
 type PolyQuots o k n = [(Polynomial o k n, Polynomial o k n)]
 
@@ -352,6 +350,14 @@ polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => Polynomial o k n
             -> [Polynomial o k n]
             -> (PolyQuots o k n, Polynomial o k n)
-polyQuotRem f = runPolynomialDivision f . divisionLoop
+polyQuotRem f dps' = (merge qs' dps, r)
+  where dps = prepareDivisors dps'
+        (qs', r) = runPolynomialDivision f $ divisionLoop dps
+        merge      []          _             =  []
+        merge qqs@((i, q):qs) ((j, _, d):ds)
+          | i == j                      =  (d, q) : merge qs ds
+          | i >  j                      =  merge qqs ds
+          | otherwise                   =  error "Bug?: prepared divisors"
+        merge     ((i, _):_)  []        =  error $ "Bug?: recursive: " ++ show i
 
 type Polynomial1 o k = Polynomial o k 1

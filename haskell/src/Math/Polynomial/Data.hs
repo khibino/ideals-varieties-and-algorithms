@@ -283,7 +283,7 @@ type DTerms k n = DList (Term k n)
 data DivisionContext o k n =
   DivisionContext
   { divisee   :: !(Polynomial o k n)
-  , quotient  :: !(IntMap (DTerms k n))
+  , quotient  :: !(IntMap (Polynomial o k n, DTerms k n))
   , remainder :: !(DTerms k n)
   }
 
@@ -297,11 +297,11 @@ hoist =  MaybeT . return
 
 runPolynomialDivision :: Polynomial o k n
                       -> PolynomialDivision o k n a
-                      -> ([(Int, Polynomial o k n)], Polynomial o k n)
+                      -> ([(Polynomial o k n, Polynomial o k n)], Polynomial o k n)
 runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
   is = DivisionContext { divisee = f, quotient = Map.empty, remainder = mempty }
   result c =
-    ([(ix, finalizeDTerms q) | (ix, q) <- Map.toList $ quotient c],
+    ([(d, finalizeDTerms q) | (_ix, (d, q)) <- Map.toList $ quotient c],
      finalizeDTerms $ remainder c)
 
 pushRemainder :: PolynomialDivision o k n ()
@@ -320,7 +320,8 @@ applyDivisor (ltF', (ix, f')) = do
   q  <-  hoist $ do
     lt <- leadingTerm p
     lt `termDiv` ltF'
-  let appendQ = insertWith (flip (<>)) ix (pure q)
+  let plus (_, qn) (f, qo) = (f, qo <> qn)
+      appendQ = insertWith plus ix (f', pure q)
   lift $ modify (\c -> c { divisee   =  p - mapPoly (q <>) f'
                          , quotient  =  appendQ $ quotient c
                          })
@@ -352,14 +353,8 @@ polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => Polynomial o k n
             -> [Polynomial o k n]
             -> (PolyQuots o k n, Polynomial o k n)
-polyQuotRem f dps' = (merge qs' dps, r)
-  where dps = prepareDivisors dps'
-        (qs', r) = runPolynomialDivision f $ divisionLoop dps
-        merge      []          _             =  []
-        merge qqs@((i, q):qs) ((_, (j, d)):ds)
-          | i == j                      =  (d, q) : merge qs ds
-          | i >  j                      =  merge qqs ds
-          | otherwise                   =  error "Bug?: prepared divisors"
-        merge     ((i, _):_)  []        =  error $ "Bug?: recursive: " ++ show i
+polyQuotRem f dps =
+  runPolynomialDivision f . divisionLoop $ prepareDivisors dps
+
 
 type Polynomial1 o k = Polynomial o k 1

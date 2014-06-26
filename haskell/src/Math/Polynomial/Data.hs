@@ -310,8 +310,10 @@ pushRemainder = do
   (lt, p')  <-  hoist $ polyUncons p
   lift $ modify (\c -> c { divisee = p', remainder = remainder c <> pure lt } )
 
+type Divisor o k n = (Term k n, (Int, Polynomial o k n))
+
 applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => (Term k n, (Int, Polynomial o k n))
+             => Divisor o k n
              -> PolynomialDivision o k n ()
 applyDivisor (ltF', (ix, f')) = do
   p  <-  divisee <$> lift get
@@ -324,7 +326,7 @@ applyDivisor (ltF', (ix, f')) = do
                          })
 
 divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => [(Term k n, (Int, Polynomial o k n))]
+             => [Divisor o k n]
              -> PolynomialDivision o k n ()
 divisionLoop dps = rec'  where
   rec' =
@@ -338,7 +340,7 @@ divisionLoop dps = rec'  where
 
 prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
                 => [Polynomial o k n]
-                -> [(Term k n, (Int, Polynomial o k n))]
+                -> [Divisor o k n]
 prepareDivisors ds' = dps  where
   ds =  sortBy (invCompare compare) $ filter (/= 0) ds'
   lts = fromMaybe (error "Bug?: leading terms") $ mapM leadingTerm ds

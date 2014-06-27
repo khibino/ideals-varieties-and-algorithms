@@ -4,7 +4,6 @@
 module Math.Polynomial.Degree
        ( Degrees', Degrees, primeDegrees
        , list, rev, degreeSubt, total
-       , liftDeg2
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)

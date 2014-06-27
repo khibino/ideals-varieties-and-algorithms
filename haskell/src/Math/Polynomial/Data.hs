@@ -34,8 +34,7 @@ import Data.DList (DList)
 import qualified Data.DList as DList
 import Data.String (IsString (..))
 
-import Math.Polynomial.Degree
-  (Degrees, primeDegrees, degreeSubt)
+import Math.Polynomial.Degree (Degrees, primeDegrees)
 import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord
   (invCompare, chainOrdering,
@@ -62,7 +61,7 @@ primeMono :: SingI n => [Int] -> Mono k n
 primeMono =  Mono . primeDegrees
 
 monoDiv :: Mono k n -> Mono k n -> Maybe (Mono k n)
-monoDiv x y = Mono <$> (degreeSubt `on` degrees) x y
+monoDiv x y = Mono <$> (Degree.subt `on` degrees) x y
 
 
 data Term k (n :: Nat) =

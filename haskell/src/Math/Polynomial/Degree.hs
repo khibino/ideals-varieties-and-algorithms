@@ -3,7 +3,7 @@
 
 module Math.Polynomial.Degree
        ( Degrees', Degrees, primeDegrees
-       , list, rev, degreeSubt, total
+       , list, rev, subt, total
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
@@ -54,9 +54,9 @@ instance Show a => Show (Degrees' n a) where
 instance (Read a, Integral a, SingI n) => Read (Degrees' n a) where
   readsPrec l s = [ (primeDegrees x, a) | (x, a) <- readsPrec l s ]
 
-{-# SPECIALIZE degreeSubt :: Degrees' n Int -> Degrees' n Int -> Maybe (Degrees' n Int) #-}
-degreeSubt :: (Integral a, Ord a) => Degrees' n a -> Degrees' n a -> Maybe (Degrees' n a)
-degreeSubt x y
+{-# SPECIALIZE subt :: Degrees' n Int -> Degrees' n Int -> Maybe (Degrees' n Int) #-}
+subt :: (Integral a, Ord a) => Degrees' n a -> Degrees' n a -> Maybe (Degrees' n a)
+subt x y
   | find (< 0) (list sub) == Nothing  =  Just sub
   | otherwise                         =  Nothing
   where sub = liftDeg2 (-) x y

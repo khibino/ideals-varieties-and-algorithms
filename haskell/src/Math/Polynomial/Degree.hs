@@ -2,8 +2,8 @@
 {-# LANGUAGE KindSignatures #-}
 
 module Math.Polynomial.Degree
-       ( Degrees', Degrees, primeDegrees, degreeList
-       , degreeSubt, degreeSum
+       ( Degrees', Degrees, primeDegrees, degreeList, list
+       , degreeSubt, degreeSum, total
        , liftDeg2
        ) where
 
@@ -17,6 +17,9 @@ newtype Degrees' (n :: Nat) d = Degrees' (ZipList d)
 
 degreeList :: Degrees' n a -> [a]
 degreeList (Degrees' (ZipList x)) = x
+
+list :: Degrees' n a -> [a]
+list (Degrees' (ZipList x)) = x
 
 instance Eq a => Eq (Degrees' n a) where
   x == y = degreeList x == degreeList y
@@ -54,5 +57,9 @@ sum' =  foldl' (+) 0
 {-# SPECIALIZE degreeSum :: Degrees' n Int -> Int #-}
 degreeSum :: Num a => Degrees' n a -> a
 degreeSum =  sum' . degreeList
+
+{-# SPECIALIZE total :: Degrees' n Int -> Int #-}
+total :: Num a => Degrees' n a -> a
+total =  sum' . list
 
 type Degrees n = Degrees' n Int

@@ -35,7 +35,8 @@ import qualified Data.DList as DList
 import Data.String (IsString (..))
 
 import Math.Polynomial.Degree
-  (Degrees, primeDegrees, degreeSum, degreeSubt)
+  (Degrees, primeDegrees, degreeSubt)
+import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord
   (invCompare, chainOrdering,
    DegOrder2, degCompare, DegreeOrder (..),
@@ -97,7 +98,7 @@ coeffMult :: Num k => k -> Term k n -> Term k n
 coeffMult x t = t { coeff = x * coeff t }
 
 totalDeg :: Term k n -> Int
-totalDeg =  degreeSum . degrees . mono
+totalDeg =  Degree.total . degrees . mono
 
 termNegate :: Num k => Term k n -> Term k n
 termNegate t = t { coeff = - coeff t }

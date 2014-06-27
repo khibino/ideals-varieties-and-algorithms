@@ -15,7 +15,8 @@ import Text.PrettyPrint.ANSI.Leijen
    tupled, encloseSep, lbracket, rbracket, line)
 
 import Math.Polynomial.Degree
-  (Degrees', Degrees, primeDegrees, degreeList)
+  (Degrees', Degrees, primeDegrees)
+import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord (DegOrder2)
 import Math.Polynomial.Data
   (Mono, degrees, primeMono, monoSing, Term, coeff, mono,
@@ -34,7 +35,7 @@ binPpr :: String -> Pretty -> Pretty -> Pretty
 binPpr =  binPpr' . string
 
 pprDegrees :: Show a => Degrees' n a -> Pretty
-pprDegrees =  parens . d . degreeList  where
+pprDegrees =  parens . d . Degree.list  where
   d []            =  mempty
   d [x]           =  ppr x
   d (x:xs@(_:_))  =  ppr x <> comma <> d xs
@@ -57,7 +58,7 @@ pprMono m = fold
   fold []        =  text "1"
   fold ts@(_:_)  =  foldr1 (<+>) ts
   vs  = variables  $ monoSing m
-  ds  = degreeList $ degrees m
+  ds  = Degree.list $ degrees m
   pow v n' = hat n' $ ppr v  where
     hat n
       | n == 1     =  id

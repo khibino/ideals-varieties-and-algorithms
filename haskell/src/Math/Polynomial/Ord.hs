@@ -22,8 +22,8 @@ import Data.Monoid (mempty)
 import Data.Ord (comparing)
 
 import Math.Polynomial.Degree
-  (Degrees', Degrees, primeDegrees, degreeList,
-   degreeSum, liftDeg2)
+  (Degrees', Degrees, primeDegrees, liftDeg2)
+import qualified Math.Polynomial.Degree as Degree
 
 
 invOrd' :: Ordering -> Ordering
@@ -48,7 +48,7 @@ newtype DegOrder2' o (n :: Nat) a =
 -- degRevCompare o x y = invCompare (degCompare o) x y where
 
 ordLex :: Ord a => DegOrder2' Lex n a
-ordLex =  DegOrder2 $ comparing degreeList
+ordLex =  DegOrder2 $ comparing Degree.list
 
 ordGrLex :: (Ord a, Num a) => DegOrder2' GrLex n a
 ordGrLex =  DegOrder2 comp  where
@@ -56,9 +56,9 @@ ordGrLex =  DegOrder2 comp  where
     | x   ==  y            = EQ
     | sx   >  sy           = GT
     | sx   <  sy           = LT
-    | otherwise            = comparing degreeList x y
-      where sx = degreeSum x
-            sy = degreeSum y
+    | otherwise            = comparing Degree.list x y
+      where sx = Degree.total x
+            sy = Degree.total y
 
 ordGrevLex :: (Ord a, Num a) => DegOrder2' GrevLex n a
 ordGrevLex =  DegOrder2 comp  where
@@ -70,9 +70,9 @@ ordGrevLex =  DegOrder2 comp  where
         []                 ->    EQ
         (v:_) | v <  0     ->    GT
               | otherwise  ->    LT
-    where sx = degreeSum x
-          sy = degreeSum y
-          grevComp = dropWhile (== 0) . reverse . degreeList
+    where sx = Degree.total x
+          sy = Degree.total y
+          grevComp = dropWhile (== 0) . reverse . Degree.list
                      $ liftDeg2 (-) x y
 
 type DegOrder2 o n = DegOrder2' o n Int

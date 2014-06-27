@@ -46,8 +46,11 @@ fromIntegralSing :: Integral a => Sing (n :: Nat) -> a
 fromIntegralSing =  fromInteger . fromSing
 
 
-newtype Mono k (n :: Nat) = Mono { degrees :: Degrees n }
+newtype Mono k (n :: Nat) = Mono { degrees' :: Degrees n }
                             deriving (Eq, Ord, Monoid, Show, Read)
+
+degrees :: Mono k n -> Degrees n
+degrees =  degrees'
 
 monoCompare :: DegOrder2 o n -> Mono k n -> Mono k n -> Ordering
 monoCompare o = degCompare o `on` degrees
@@ -64,17 +67,23 @@ monoDiv x y = Mono <$> (degreeSubt `on` degrees) x y
 
 data Term k (n :: Nat) =
   Term
-  { coeff :: !k
-  , mono  :: !(Mono k n)
+  { coeff' :: !k
+  , mono'  :: !(Mono k n)
   } deriving (Eq, Show, Read)
+
+coeff :: Term k n -> k
+coeff =  coeff'
+
+mono :: Term k n -> Mono k n
+mono =  mono'
 
 instance Ord k => Ord (Term k n) where
   Term c0 m0 `compare` Term c1 m1 = (m0, c0) `compare` (m1, c1)
 
 instance (Num k, SingI n) => Monoid (Term k n) where
-  mempty   = Term { coeff = 1, mono = mempty }
-  Term { coeff = xc, mono = xm } `mappend` Term { coeff = yc, mono = ym } =
-    Term { coeff = xc * yc, mono = xm <> ym }
+  mempty   = Term { coeff' = 1, mono' = mempty }
+  Term { coeff' = xc, mono' = xm } `mappend` Term { coeff' = yc, mono' = ym } =
+    Term { coeff' = xc * yc, mono' = xm <> ym }
 
 term :: SingI n => k -> [Int] -> Term k n
 term ce = Term ce . primeMono
@@ -95,13 +104,13 @@ termListCompare o xs ys = xs `comp` ys  where
                  $ zipWith (termCompare o) (p ++ es) (q ++ es)
 
 coeffMult :: Num k => k -> Term k n -> Term k n
-coeffMult x t = t { coeff = x * coeff t }
+coeffMult x t = t { coeff' = x * coeff t }
 
 totalDeg :: Term k n -> Int
 totalDeg =  Degree.total . degrees . mono
 
 termNegate :: Num k => Term k n -> Term k n
-termNegate t = t { coeff = - coeff t }
+termNegate t = t { coeff' = - coeff t }
 
 termDiv :: Fractional k => Term k n -> Term k n -> Maybe (Term k n)
 termDiv x y =  Term (coeff x / coeff y) <$> (monoDiv `on` mono) x y
@@ -177,7 +186,10 @@ variables :: Sing n -> [Var k n]
 variables =  variables' . fieldVariables'
 
 newtype Polynomial o k (n :: Nat) =
-  Polynomial { terms :: [Term k n] } deriving (Eq, Show, Read)
+  Polynomial { terms' :: [Term k n] } deriving (Eq, Show, Read)
+
+terms :: Polynomial o k n -> [Term k n]
+terms =  terms'
 
 -- type propagate hack
 polyOrder :: DegreeOrder o => Polynomial o k n -> DegOrder2 o n
@@ -194,7 +206,7 @@ polyAggregateTerms =  Polynomial . nzero . map usum . grp  where
   grp  =  groupBy ((==) `on` mono)
   usum  []    = error "unsafely sum terms: Broken group passed!"
   usum (t:ts) = foldl'
-                (\ta t' -> ta { coeff = coeff ta + coeff t' })
+                (\ta t' -> ta { coeff' = coeff ta + coeff t' })
                 t ts
   nzero ts = [t | t <- ts, coeff t /= 0 ]
 
@@ -240,7 +252,7 @@ p0 `polyMult` p1 =
   ]
 
 mapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
-mapPoly f p = p { terms = [ f t | t <- terms p ] }
+mapPoly f p = p { terms' = [ f t | t <- terms p ] }
 
 polyNegate :: Num k => Polynomial o k n -> Polynomial o k n
 polyNegate =  mapPoly termNegate
@@ -258,7 +270,7 @@ instance (SingI n, Ord k, Num k, DegreeOrder o) => Num (Polynomial o k n)  where
   negate = polyNegate
   fromInteger i
     | i == 0    =  polynomial []
-    | otherwise =  polynomial [ mempty { coeff = fromInteger i } ]
+    | otherwise =  polynomial [ mempty { coeff' = fromInteger i } ]
 
   abs = id
   signum _ = 1

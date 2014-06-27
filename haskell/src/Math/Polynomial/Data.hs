@@ -26,7 +26,7 @@ import Control.Monad.Trans.Maybe (MaybeT (..))
 import Control.Monad.Trans.State.Strict (State, get, modify, execState)
 import Data.Monoid (Monoid(..), (<>))
 import Data.Function (on)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (mapMaybe)
 import Data.List (foldl', sortBy, groupBy)
 import Data.IntMap.Strict (IntMap, insertWith)
 import qualified Data.IntMap.Strict as Map
@@ -355,10 +355,11 @@ divisionLoop dps = rec'  where
 prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
                 => [Polynomial o k n]
                 -> [Divisor o k n]
-prepareDivisors ds' = dps  where
-  ds =  sortBy (invCompare compare) $ filter (/= 0) ds'
-  lts = fromMaybe (error "Bug?: leading terms") $ mapM leadingTerm ds
-  dps = zip lts $ zip [0..] ds
+prepareDivisors ds = dps  where
+  tryD p@(_, d) = do
+    lt <- leadingTerm d
+    return (lt, p)
+  dps = mapMaybe tryD $ zip [0..] ds
 
 type PolyQuots o k n = [(Polynomial o k n, Polynomial o k n)]
 

@@ -2,8 +2,8 @@
 {-# LANGUAGE KindSignatures #-}
 
 module Math.Polynomial.Degree
-       ( Degrees', Degrees, primeDegrees, list
-       , degreeSubt, total
+       ( Degrees', Degrees, primeDegrees
+       , list, rev, degreeSubt, total
        , liftDeg2
        ) where
 
@@ -18,6 +18,9 @@ newtype Degrees' (n :: Nat) d = Degrees' (ZipList d)
 list :: Degrees' n a -> [a]
 list (Degrees' (ZipList x)) = x
 
+rev :: Degrees' n a -> [a]
+rev =  reverse . list
+
 instance Eq a => Eq (Degrees' n a) where
   x == y = list x == list y
 
@@ -25,7 +28,7 @@ primeDegrees' :: Integral a => Sing n -> [a] -> Degrees' n a
 primeDegrees' s = Degrees' . ZipList . take (fromInteger $ fromSing s) . (++ repeat 0)
 
 primeDegrees :: (SingI n, Integral a) => [a] -> Degrees' n a
-primeDegrees = primeDegrees' sing
+primeDegrees =  primeDegrees' sing
 
 liftDeg2 :: (a -> a -> a) -> Degrees' n a -> Degrees' n a -> Degrees' n a
 liftDeg2 op (Degrees' x) (Degrees' y) = Degrees' $ op <$> x <*> y

@@ -22,7 +22,7 @@ import Data.Monoid (mempty)
 import Data.Ord (comparing)
 
 import Math.Polynomial.Degree
-  (Degrees', Degrees, primeDegrees, liftDeg2)
+  (Degrees', Degrees, primeDegrees)
 import qualified Math.Polynomial.Degree as Degree
 
 
@@ -72,8 +72,7 @@ ordGrevLex =  DegOrder2 comp  where
               | otherwise  ->    LT
     where sx = Degree.total x
           sy = Degree.total y
-          grevComp = dropWhile (== 0) . reverse . Degree.list
-                     $ liftDeg2 (-) x y
+          grevComp = dropWhile (== 0) $ (zipWith (-) `on` Degree.rev) x y
 
 type DegOrder2 o n = DegOrder2' o n Int
 

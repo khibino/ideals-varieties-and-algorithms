@@ -27,6 +27,7 @@ library
   -- other-modules:
   build-depends:         base <5
                        , containers
+                       , array
                        , transformers
                        , dlist
                        , ansi-wl-pprint

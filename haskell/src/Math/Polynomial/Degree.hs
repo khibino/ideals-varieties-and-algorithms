@@ -7,30 +7,42 @@ module Math.Polynomial.Degree
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
-import Control.Applicative ((<$>), (<*>), ZipList (..))
 import Data.Monoid (Monoid(..))
 import Data.List (foldl', find)
+import Data.Word (Word)
+import Data.Array (Array, listArray, bounds, elems, (!))
 
 
-newtype Degrees' (n :: Nat) d = Degrees' (ZipList d)
+newtype Degrees' (n :: Nat) a = Degrees' (Array Word a)
+
+unDeg :: Degrees' n a -> Array Word a
+unDeg (Degrees' a) = a
+
+size :: Degrees' n a -> Word
+size d = h - l + 1  where (l, h) = bounds $ unDeg d
 
 list :: Degrees' n a -> [a]
-list (Degrees' (ZipList x)) = x
+list =  elems . unDeg
 
 rev :: Degrees' n a -> [a]
-rev =  reverse . list
+rev d = [ a ! i | i <- [h, h - 1 .. l] ]  where
+  a = unDeg d
+  (l, h) = bounds a
 
 instance Eq a => Eq (Degrees' n a) where
   x == y = list x == list y
 
+unsafeFromList :: Integral a => Word -> [a] -> Degrees' n a
+unsafeFromList n = Degrees' . listArray (0, n - 1) . (++ repeat 0)
+
 primeDegrees' :: Integral a => Sing n -> [a] -> Degrees' n a
-primeDegrees' s = Degrees' . ZipList . take (fromInteger $ fromSing s) . (++ repeat 0)
+primeDegrees' s = unsafeFromList . fromInteger $ fromSing s
 
 primeDegrees :: (SingI n, Integral a) => [a] -> Degrees' n a
 primeDegrees =  primeDegrees' sing
 
-liftDeg2 :: (a -> a -> a) -> Degrees' n a -> Degrees' n a -> Degrees' n a
-liftDeg2 op (Degrees' x) (Degrees' y) = Degrees' $ op <$> x <*> y
+liftDeg2 :: Integral a => (a -> a -> a) -> Degrees' n a -> Degrees' n a -> Degrees' n a
+liftDeg2 op x y = unsafeFromList (size x) $ zipWith op (list x) (list y)
 
 instance (Integral a, SingI n) => Monoid (Degrees' n a) where
   mempty       =  primeDegrees []
@@ -43,10 +55,10 @@ instance (Read a, Integral a, SingI n) => Read (Degrees' n a) where
   readsPrec l s = [ (primeDegrees x, a) | (x, a) <- readsPrec l s ]
 
 {-# SPECIALIZE degreeSubt :: Degrees' n Int -> Degrees' n Int -> Maybe (Degrees' n Int) #-}
-degreeSubt :: (Num a, Ord a) => Degrees' n a -> Degrees' n a -> Maybe (Degrees' n a)
+degreeSubt :: (Integral a, Ord a) => Degrees' n a -> Degrees' n a -> Maybe (Degrees' n a)
 degreeSubt x y
-  | find (< 0) (list sub) == Nothing = Just sub
-  | otherwise                              = Nothing
+  | find (< 0) (list sub) == Nothing  =  Just sub
+  | otherwise                         =  Nothing
   where sub = liftDeg2 (-) x y
 
 {-# SPECIALIZE sum' :: [Int] -> Int #-}

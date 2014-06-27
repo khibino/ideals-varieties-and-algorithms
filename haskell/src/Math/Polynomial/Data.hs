@@ -46,11 +46,11 @@ fromIntegralSing :: Integral a => Sing (n :: Nat) -> a
 fromIntegralSing =  fromInteger . fromSing
 
 
-newtype Mono k (n :: Nat) = Mono { degrees' :: Degrees n }
-                            deriving (Eq, Ord, Monoid, Show, Read)
+newtype Mono k (n :: Nat) = Mono (Degrees n)
+                          deriving (Eq, Ord, Monoid, Show, Read)
 
 degrees :: Mono k n -> Degrees n
-degrees =  degrees'
+degrees (Mono d) = d
 
 monoCompare :: DegOrder2 o n -> Mono k n -> Mono k n -> Ordering
 monoCompare o = degCompare o `on` degrees

@@ -6,7 +6,7 @@
 module Math.Polynomial.Ord
        ( invCompare, chainOrdering
 
-       , DegOrder2' (..), DegOrder2
+       , DegOrder2', DegOrder2, degCompare
        , Lex, ordLex
        , GrLex, ordGrLex
        , GrevLex, ordGrevLex
@@ -42,7 +42,10 @@ data GrLex
 data GrevLex
 
 newtype DegOrder2' o (n :: Nat) a =
-  DegOrder2 { degCompare :: Degrees' n a -> Degrees' n a -> Ordering }
+  DegOrder2 (Degrees' n a -> Degrees' n a -> Ordering)
+
+degCompare :: DegOrder2' o n a -> Degrees' n a -> Degrees' n a -> Ordering
+degCompare (DegOrder2 c) = c
 
 ordLex :: Ord a => DegOrder2' Lex n a
 ordLex =  DegOrder2 $ comparing Degree.list

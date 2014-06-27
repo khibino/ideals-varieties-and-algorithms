@@ -44,9 +44,6 @@ data GrevLex
 newtype DegOrder2' o (n :: Nat) a =
   DegOrder2 { degCompare :: Degrees' n a -> Degrees' n a -> Ordering }
 
--- degRevCompare :: DegOrder2' o n a -> Degrees' n a -> Degrees' n a -> Ordering
--- degRevCompare o x y = invCompare (degCompare o) x y where
-
 ordLex :: Ord a => DegOrder2' Lex n a
 ordLex =  DegOrder2 $ comparing Degree.list
 

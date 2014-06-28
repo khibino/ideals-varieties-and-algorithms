@@ -23,8 +23,8 @@ import Math.Polynomial.Data
    variables, Polynomial, terms, PolyQuots)
 
 
-ppr :: Show a => a -> Doc
-ppr =  text . show
+pshow :: Show a => a -> Doc
+pshow =  text . show
 
 binPpr' :: Doc -> Doc -> Doc -> Doc
 binPpr' op x y = x <> op <> y
@@ -35,8 +35,8 @@ binPpr =  binPpr' . string
 pprDegrees :: Show a => Degrees' n a -> Doc
 pprDegrees =  parens . d . Degree.list  where
   d []            =  mempty
-  d [x]           =  ppr x
-  d (x:xs@(_:_))  =  ppr x <> comma <> d xs
+  d [x]           =  pshow x
+  d (x:xs@(_:_))  =  pshow x <> comma <> d xs
 
 _e0Degrees :: Degrees 3
 _e0Degrees =  primeDegrees [2, 1, 5]
@@ -57,10 +57,10 @@ pprMono m = fold
   fold ts@(_:_)  =  foldr1 (<+>) ts
   vs  = variables  $ monoSing m
   ds  = Degree.list $ degrees m
-  pow v n' = hat n' $ ppr v  where
+  pow v n' = hat n' $ pshow v  where
     hat n
       | n == 1     =  id
-      | otherwise  =  (<> text "^" <> ppr n)
+      | otherwise  =  (<> text "^" <> pshow n)
 
 _e0Mono :: Mono Rational 3
 _e0Mono =  mempty

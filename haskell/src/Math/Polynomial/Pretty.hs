@@ -11,7 +11,8 @@ import GHC.TypeLits (SingI)
 import Data.Monoid (Monoid(..), (<>))
 
 import Text.PrettyPrint.ANSI.Leijen
-  (Doc, text, string, comma, parens, (<+>),
+  (Doc, text, comma, parens, (<+>),
+   green, magenta, cyan,
    tupled, encloseSep, lbracket, rbracket, line)
 
 import Math.Polynomial.Degree
@@ -26,11 +27,20 @@ import Math.Polynomial.Data
 pshow :: Show a => a -> Doc
 pshow =  text . show
 
+opt :: String -> Doc
+opt =  green . text
+
 binPpr' :: Doc -> Doc -> Doc -> Doc
 binPpr' op x y = x <> op <> y
 
-binPpr :: String -> Doc -> Doc -> Doc
-binPpr =  binPpr' . string
+-- binPpr :: String -> Doc -> Doc -> Doc
+-- binPpr =  binPpr' . string
+
+pr :: (Doc -> Doc) -> String -> Doc
+pr c = c . text
+
+cparens :: (Doc -> Doc) -> Doc -> Doc
+cparens c t = pr c "(" <> t <> pr c ")"
 
 pprDegrees :: Show a => Degrees' n a -> Doc
 pprDegrees =  parens . d . Degree.list  where
@@ -76,7 +86,7 @@ pprCoeff c
   | c == 1      =  mempty
   | otherwise   =  uparen $ show c  where
     uparen s
-      | ' ' `elem` s = parens $ text s
+      | ' ' `elem` s = cparens cyan $ text s
       | otherwise    = text s
 
 pprTerm :: (Eq k, Num k, Show k, SingI n) => Term k n -> Doc
@@ -84,12 +94,12 @@ pprTerm t = coeff t `mul` mono t  where
   mul c m
     | c == 1      = pprMono m
     | m == mempty = pprCoeff c
-    | otherwise   = pprCoeff c <> text "*" <> pprMono m
+    | otherwise   = pprCoeff c <> opt "*" <> pprMono m
 
 pprPoly :: (Eq k, Num k, Show k, SingI n) => Polynomial o k n -> Doc
 pprPoly p = fold [ pprTerm t | t <- terms p ]  where
   fold []        =  text "0"
-  fold ts@(_:_)  =  foldr1 (binPpr " + ") ts
+  fold ts@(_:_)  =  foldr1 (binPpr' $ opt " + ") ts
 
 pprPolyO :: (Eq k, Num k, Show k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Doc
 pprPolyO =  const pprPoly
@@ -102,9 +112,9 @@ pprQuotsRem' :: (Eq k, Num k, Show k, SingI n)
             => [PolyQuot o k n]
             -> Polynomial o k n
             -> Doc
-pprQuotsRem' qs r = foldr1 (binPpr' $ text " + " <> line) $ map pquot qs ++ [ppoly r]  where
-  ppoly = parens . pprPoly
-  pquot pq = ppoly (quotient pq) <> text " * " <> ppoly (divisor pq)
+pprQuotsRem' qs r = foldr1 (binPpr' $ opt " + " <> line) $ map pquot qs ++ [ppoly r]  where
+  ppoly = cparens magenta . pprPoly
+  pquot pq = ppoly (quotient pq) <> opt " * " <> ppoly (divisor pq)
 
 pprQuotsRem :: (Eq k, Num k, Show k, SingI n)
             => PolyQuotsRem o k n

@@ -4,6 +4,8 @@
 module Math.Polynomial.Examples.Small
        where
 
+import Prelude hiding ((^))
+import qualified Prelude
 import Data.Monoid (mempty, (<>))
 import Math.Polynomial.Imports
 
@@ -56,3 +58,11 @@ e3Poly =  1 + "z"
 e0R :: GPolynomial Rational 1
 e0Q :: [PolyQuot GrevLex Rational 1]
 PolyQuotsRem e0Q e0R = p ["z"^.3, "1"] /. [p ["z", "1"]]
+
+e4Poly :: Polynomial GrevLex Rational 3
+e4Poly =  "x"^10 + 1  where
+  (^) :: Num a => a -> Int -> a
+  (^) =  (Prelude.^)
+
+ePQR0 :: PolyQuotsRem GrevLex Rational 3
+ePQR0 =  e4Poly /. [2 * "x" + 1]

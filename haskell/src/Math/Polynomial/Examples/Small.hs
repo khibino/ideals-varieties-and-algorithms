@@ -10,6 +10,15 @@ import Data.Monoid (mempty, (<>))
 import Math.Polynomial.Imports
 
 
+e0Degrees :: Degrees 3
+e0Degrees =  primeDegrees [2, 1, 5]
+
+e1Degrees :: Degrees 1
+e1Degrees =  primeDegrees [2, 1, 5]
+
+e2Degrees :: Degrees 0
+e2Degrees =  primeDegrees [2, 1, 5]
+
 e0Mono :: Mono Rational 3
 e0Mono =  mempty
 

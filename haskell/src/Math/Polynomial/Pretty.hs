@@ -56,15 +56,6 @@ instance (Pretty a, Ord a, Integral a) => Pretty (Ratio a)  where
 pprDegrees :: Pretty a => Degrees' n a -> Doc
 pprDegrees =  tupled . map pretty . Degree.list  where
 
-_e0Degrees :: Degrees 3
-_e0Degrees =  primeDegrees [2, 1, 5]
-
-_e1Degrees :: Degrees 1
-_e1Degrees =  primeDegrees [2, 1, 5]
-
-_e2Degrees :: Degrees 0
-_e2Degrees =  primeDegrees [2, 1, 5]
-
 pprMono :: SingI n => Mono k n -> Doc
 pprMono m = fold
             [ var `pow` deg

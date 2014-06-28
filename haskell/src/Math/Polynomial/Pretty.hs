@@ -4,7 +4,7 @@
 module Math.Polynomial.Pretty
        ( Doc, pretty
        , pprDegrees, pprMono, pprTerm
-       , pprPoly, pprPolyO, pprQuots, pprQuotsRem', pprQuotsRem
+       , pprPoly, pprPolyO, pprQuot, pprQuotsRem', pprQuotsRem
        )
        where
 
@@ -15,10 +15,9 @@ import Data.Ratio (Ratio, numerator, denominator)
 import Text.PrettyPrint.ANSI.Leijen
   (Doc, Pretty (..), text, (<+>),
    green, magenta, cyan,
-   tupled, encloseSep, lbracket, rbracket, line)
+   tupled, line)
 
-import Math.Polynomial.Degree
-  (Degrees', Degrees, primeDegrees)
+import Math.Polynomial.Degree (Degrees')
 import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord (DegOrder2)
 import Math.Polynomial.Data
@@ -34,9 +33,6 @@ opt =  green . text
 
 binPpr' :: Doc -> Doc -> Doc -> Doc
 binPpr' op x y = x <> op <> y
-
--- binPpr :: String -> Doc -> Doc -> Doc
--- binPpr =  binPpr' . string
 
 pr :: (Doc -> Doc) -> String -> Doc
 pr c = c . text
@@ -95,9 +91,8 @@ pprPoly p = fold [ pprTerm t | t <- terms p ]  where
 pprPolyO :: (Eq k, Num k, Pretty k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Doc
 pprPolyO =  const pprPoly
 
-pprQuots :: (Eq k, Num k, Pretty k, SingI n) => [PolyQuot o k n] -> Doc
-pprQuots =  encloseSep lbracket rbracket line . map pquot  where
-  pquot pq = tupled [pprPoly $ quotient pq, pprPoly $ divisor pq]
+pprQuot :: (Eq k, Num k, Pretty k, SingI n) => PolyQuot o k n -> Doc
+pprQuot pq = tupled [pprPoly $ quotient pq, pprPoly $ divisor pq]
 
 pprQuotsRem' :: (Eq k, Num k, Pretty k, SingI n)
             => [PolyQuot o k n]
@@ -113,3 +108,21 @@ pprQuotsRem :: (Eq k, Num k, Pretty k, SingI n)
 pprQuotsRem qr =  pprQuotsRem' qs r  where
   qs = quots qr
   r  = remainder qr
+
+instance Pretty a => Pretty (Degrees' n a) where
+  pretty = pprDegrees
+
+instance (Pretty k, SingI n) => Pretty (Mono k n) where
+  pretty = pprMono
+
+instance (Pretty k, Eq k, Num k, SingI n) => Pretty (Term k n) where
+  pretty = pprTerm
+
+instance (Pretty k, Eq k, Num k, SingI n) => Pretty (Polynomial o k n) where
+  pretty = pprPoly
+
+instance (Pretty k, Eq k, Num k, SingI n) => Pretty (PolyQuot o k n) where
+  pretty = pprQuot
+
+instance (Pretty k, Eq k, Num k, SingI n) => Pretty (PolyQuotsRem o k n) where
+  pretty = pprQuotsRem

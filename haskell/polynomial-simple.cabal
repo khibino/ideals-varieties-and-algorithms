@@ -23,6 +23,9 @@ library
                        Math.Polynomial.Combinator
                        Math.Polynomial.Imports
                        Math.Polynomial.Check
+
+                       Math.Polynomial.Examples.Small
+                       Math.Polynomial.Examples.Chapter2
                        Math.Polynomial.Examples
   -- other-modules:
   build-depends:         base <5

@@ -54,5 +54,5 @@ e3Poly =  1 + "z"
 
 
 e0R :: GPolynomial Rational 1
-e0Q :: [(GPolynomial Rational 1, GPolynomial Rational 1)]
-(e0Q, e0R) = p ["z"^.3, "1"] /. [p ["z", "1"]]
+e0Q :: [PolyQuot GrevLex Rational 1]
+PolyQuotsRem e0Q e0R = p ["z"^.3, "1"] /. [p ["z", "1"]]

@@ -28,10 +28,10 @@ eC2S3_1a_F =  ["x"*"y"^2 - "x", "x" - "y"^3]
 -- eC2S3_1a_qr :: DegreeOrder o => (PolyQuots o Rational 3, Polynomial o Rational 3)
 -- eC2S3_1a_qr =  eC2S3_1 /. eC2S3_1a_F
 
-eC2S3_1a_qr_gr :: (PolyQuots GrLex Rational 3, Polynomial GrLex Rational 3)
+eC2S3_1a_qr_gr :: PolyQuotsRem GrLex Rational 3
 eC2S3_1a_qr_gr =  eC2S3_1_gr /. eC2S3_1a_F
 
-eC2S3_1a_qr_lex :: (PolyQuots Lex Rational 3, Polynomial Lex Rational 3)
+eC2S3_1a_qr_lex :: PolyQuotsRem Lex Rational 3
 eC2S3_1a_qr_lex =  eC2S3_1_lex /. eC2S3_1a_F
 
 ppr_eC2S3_1a_qr_gr :: Doc
@@ -44,10 +44,10 @@ ppr_eC2S3_1a_qr_lex = pprQuotsRem eC2S3_1a_qr_lex
 eC2S3_1b_F :: DegreeOrder o => [Polynomial o Rational 3]
 eC2S3_1b_F =  ["x" - "y"^3, "x"*"y"^2 - "x"]
 
-eC2S3_1b_qr_gr :: (PolyQuots GrLex Rational 3, Polynomial GrLex Rational 3)
+eC2S3_1b_qr_gr :: PolyQuotsRem GrLex Rational 3
 eC2S3_1b_qr_gr =  eC2S3_1_gr /. eC2S3_1b_F
 
-eC2S3_1b_qr_lex :: (PolyQuots Lex Rational 3, Polynomial Lex Rational 3)
+eC2S3_1b_qr_lex :: PolyQuotsRem Lex Rational 3
 eC2S3_1b_qr_lex =  eC2S3_1_lex /. eC2S3_1b_F
 
 ppr_eC2S3_1b_qr_gr :: Doc

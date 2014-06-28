@@ -15,7 +15,8 @@ module Math.Polynomial.Data
        , Polynomial1
        , leadingTerm, leadingMono, multiDegree
 
-       , polyQuotRem, PolyQuots
+       , PolyQuot (..), PolyQuotsRem (..)
+       , polyQuotRem
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
@@ -307,14 +308,31 @@ type PolynomialDivision o k n = MaybeT (State (DivisionContext o k n))
 hoist :: Maybe a -> PolynomialDivision o k n a
 hoist =  MaybeT . return
 
+data PolyQuot o k n =
+  PolyQuot
+  { quotient :: Polynomial o k n
+  , divisor  :: Polynomial o k n
+  } deriving (Eq, Ord, Show)
+
+data PolyQuotsRem o k n =
+  PolyQuotsRem
+  { quots     :: [PolyQuot o k n]
+  , remainder :: Polynomial o k n
+  } deriving (Eq, Ord, Show)
+
 runPolynomialDivision :: Polynomial o k n
                       -> PolynomialDivision o k n a
-                      -> ([(Polynomial o k n, Polynomial o k n)], Polynomial o k n)
+                      -> PolyQuotsRem o k n
 runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
   is = DivisionContext { contDivisee = f, contQuotient = Map.empty, contRemainder = mempty }
   result c =
-    ([(d, finalizeDTerms q) | (_ix, (d, q)) <- Map.toList $ contQuotient c],
-     finalizeDTerms $ contRemainder c)
+    (PolyQuotsRem
+     { quots = [ PolyQuot { quotient  =  finalizeDTerms q
+                          , divisor   =  d
+                          }
+               | (_ix, (d, q)) <- Map.toList $ contQuotient c ]
+     , remainder = finalizeDTerms $ contRemainder c
+     })
 
 pushRemainder :: PolynomialDivision o k n ()
 pushRemainder = do
@@ -360,12 +378,10 @@ prepareDivisors ds = dps  where
     return (lt, p)
   dps = mapMaybe tryD $ zip [0..] ds
 
-type PolyQuots o k n = [(Polynomial o k n, Polynomial o k n)]
-
 polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => Polynomial o k n
             -> [Polynomial o k n]
-            -> (PolyQuots o k n, Polynomial o k n)
+            -> PolyQuotsRem o k n
 polyQuotRem f dps =
   runPolynomialDivision f . divisionLoop $ prepareDivisors dps
 

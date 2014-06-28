@@ -16,7 +16,7 @@ import Math.Polynomial.Ord (DegreeOrder (..))
 
 import Math.Polynomial.Data
   (Var, varNum, Mono, primeMono, Term, term, coeffMult,
-   Polynomial, polynomial, PolyQuots, polyQuotRem)
+   Polynomial, polynomial, PolyQuotsRem, polyQuotRem)
 
 
 varDegVector' :: (SingI n, Integral a) => Var k n -> a -> [a]
@@ -68,7 +68,7 @@ p =  polynomial
 (/.) :: (Fractional k, Ord k, SingI n, DegreeOrder o)
      => Polynomial o k n
      -> [Polynomial o k n]
-     -> (PolyQuots o k n, Polynomial o k n)
+     -> PolyQuotsRem o k n
 (/.) = polyQuotRem
 
 infixr 8 ^.

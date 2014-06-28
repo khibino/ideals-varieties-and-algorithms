@@ -20,7 +20,7 @@ import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord (DegOrder2)
 import Math.Polynomial.Data
   (Mono, degrees, primeMono, monoSing, Term, coeff, mono,
-   variables, Polynomial, terms, PolyQuots)
+   variables, Polynomial, terms, PolyQuot (..), PolyQuotsRem (..))
 
 
 pshow :: Show a => a -> Doc
@@ -94,19 +94,21 @@ pprPoly p = fold [ pprTerm t | t <- terms p ]  where
 pprPolyO :: (Eq k, Num k, Show k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Doc
 pprPolyO =  const pprPoly
 
-pprQuots :: (Eq k, Num k, Show k, SingI n) => PolyQuots o k n -> Doc
+pprQuots :: (Eq k, Num k, Show k, SingI n) => [PolyQuot o k n] -> Doc
 pprQuots =  encloseSep lbracket rbracket line . map pquot  where
-  pquot (d, q) = tupled [pprPoly d, pprPoly q]
+  pquot pq = tupled [pprPoly $ quotient pq, pprPoly $ divisor pq]
 
 pprQuotsRem' :: (Eq k, Num k, Show k, SingI n)
-            => PolyQuots o k n
+            => [PolyQuot o k n]
             -> Polynomial o k n
             -> Doc
 pprQuotsRem' qs r = foldr1 (binPpr' $ text " + " <> line) $ map pquot qs ++ [ppoly r]  where
   ppoly = parens . pprPoly
-  pquot (d, q) = ppoly d <> text " * " <> ppoly q
+  pquot pq = ppoly (quotient pq) <> text " * " <> ppoly (divisor pq)
 
 pprQuotsRem :: (Eq k, Num k, Show k, SingI n)
-            => (PolyQuots o k n, Polynomial o k n)
+            => PolyQuotsRem o k n
             -> Doc
-pprQuotsRem =  uncurry pprQuotsRem'
+pprQuotsRem qr =  pprQuotsRem' qs r  where
+  qs = quots qr
+  r  = remainder qr

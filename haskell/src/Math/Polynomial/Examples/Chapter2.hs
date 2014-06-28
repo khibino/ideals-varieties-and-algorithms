@@ -34,10 +34,10 @@ eC2S3_1a_qr_gr =  eC2S3_1_gr /. eC2S3_1a_F
 eC2S3_1a_qr_lex :: (PolyQuots Lex Rational 3, Polynomial Lex Rational 3)
 eC2S3_1a_qr_lex =  eC2S3_1_lex /. eC2S3_1a_F
 
-ppr_eC2S3_1a_qr_gr :: Pretty
+ppr_eC2S3_1a_qr_gr :: Doc
 ppr_eC2S3_1a_qr_gr =  pprQuotsRem eC2S3_1a_qr_gr
 
-ppr_eC2S3_1a_qr_lex :: Pretty
+ppr_eC2S3_1a_qr_lex :: Doc
 ppr_eC2S3_1a_qr_lex = pprQuotsRem eC2S3_1a_qr_lex
 
 
@@ -50,10 +50,10 @@ eC2S3_1b_qr_gr =  eC2S3_1_gr /. eC2S3_1b_F
 eC2S3_1b_qr_lex :: (PolyQuots Lex Rational 3, Polynomial Lex Rational 3)
 eC2S3_1b_qr_lex =  eC2S3_1_lex /. eC2S3_1b_F
 
-ppr_eC2S3_1b_qr_gr :: Pretty
+ppr_eC2S3_1b_qr_gr :: Doc
 ppr_eC2S3_1b_qr_gr =  pprQuotsRem eC2S3_1b_qr_gr
 
-ppr_eC2S3_1b_qr_lex :: Pretty
+ppr_eC2S3_1b_qr_lex :: Doc
 ppr_eC2S3_1b_qr_lex = pprQuotsRem eC2S3_1b_qr_lex
 
 

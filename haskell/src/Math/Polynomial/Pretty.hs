@@ -1,7 +1,7 @@
 {-# LANGUAGE DataKinds #-}
 
 module Math.Polynomial.Pretty
-       ( Pretty
+       ( Doc
        , pprDegrees, pprMono, pprTerm
        , pprPoly, pprPolyO, pprQuots, pprQuotsRem', pprQuotsRem
        )
@@ -23,18 +23,16 @@ import Math.Polynomial.Data
    variables, Polynomial, terms, PolyQuots)
 
 
-type Pretty = Doc
-
-ppr :: Show a => a -> Pretty
+ppr :: Show a => a -> Doc
 ppr =  text . show
 
-binPpr' :: Pretty -> Pretty -> Pretty -> Pretty
+binPpr' :: Doc -> Doc -> Doc -> Doc
 binPpr' op x y = x <> op <> y
 
-binPpr :: String -> Pretty -> Pretty -> Pretty
+binPpr :: String -> Doc -> Doc -> Doc
 binPpr =  binPpr' . string
 
-pprDegrees :: Show a => Degrees' n a -> Pretty
+pprDegrees :: Show a => Degrees' n a -> Doc
 pprDegrees =  parens . d . Degree.list  where
   d []            =  mempty
   d [x]           =  ppr x
@@ -49,7 +47,7 @@ _e1Degrees =  primeDegrees [2, 1, 5]
 _e2Degrees :: Degrees 0
 _e2Degrees =  primeDegrees [2, 1, 5]
 
-pprMono :: SingI n => Mono k n -> Pretty
+pprMono :: SingI n => Mono k n -> Doc
 pprMono m = fold
             [ var `pow` deg
             | (var, deg) <- zip vs ds
@@ -73,7 +71,7 @@ _e1Mono =  primeMono [4, 2, 1]
 _e2Mono :: Mono Rational 3
 _e2Mono =  primeMono [5, 0, 2]
 
-pprCoeff :: (Eq k, Num k, Show k) => k -> Pretty
+pprCoeff :: (Eq k, Num k, Show k) => k -> Doc
 pprCoeff c
   | c == 1      =  mempty
   | otherwise   =  uparen $ show c  where
@@ -81,34 +79,34 @@ pprCoeff c
       | ' ' `elem` s = parens $ text s
       | otherwise    = text s
 
-pprTerm :: (Eq k, Num k, Show k, SingI n) => Term k n -> Pretty
+pprTerm :: (Eq k, Num k, Show k, SingI n) => Term k n -> Doc
 pprTerm t = coeff t `mul` mono t  where
   mul c m
     | c == 1      = pprMono m
     | m == mempty = pprCoeff c
     | otherwise   = pprCoeff c <> text "*" <> pprMono m
 
-pprPoly :: (Eq k, Num k, Show k, SingI n) => Polynomial o k n -> Pretty
+pprPoly :: (Eq k, Num k, Show k, SingI n) => Polynomial o k n -> Doc
 pprPoly p = fold [ pprTerm t | t <- terms p ]  where
   fold []        =  text "0"
   fold ts@(_:_)  =  foldr1 (binPpr " + ") ts
 
-pprPolyO :: (Eq k, Num k, Show k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Pretty
+pprPolyO :: (Eq k, Num k, Show k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Doc
 pprPolyO =  const pprPoly
 
-pprQuots :: (Eq k, Num k, Show k, SingI n) => PolyQuots o k n -> Pretty
+pprQuots :: (Eq k, Num k, Show k, SingI n) => PolyQuots o k n -> Doc
 pprQuots =  encloseSep lbracket rbracket line . map pquot  where
   pquot (d, q) = tupled [pprPoly d, pprPoly q]
 
 pprQuotsRem' :: (Eq k, Num k, Show k, SingI n)
             => PolyQuots o k n
             -> Polynomial o k n
-            -> Pretty
+            -> Doc
 pprQuotsRem' qs r = foldr1 (binPpr' $ text " + " <> line) $ map pquot qs ++ [ppoly r]  where
   ppoly = parens . pprPoly
   pquot (d, q) = ppoly d <> text " * " <> ppoly q
 
 pprQuotsRem :: (Eq k, Num k, Show k, SingI n)
             => (PolyQuots o k n, Polynomial o k n)
-            -> Pretty
+            -> Doc
 pprQuotsRem =  uncurry pprQuotsRem'

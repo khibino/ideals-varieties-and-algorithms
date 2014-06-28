@@ -1,5 +1,5 @@
 module Math.Polynomial.Check
-       ( checkQuotsRem ) where
+       ( checkQuotsRem, checks ) where
 
 import GHC.TypeLits (SingI)
 import Math.Polynomial.Imports
@@ -19,3 +19,12 @@ checkQuotsRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
               -> Bool
 checkQuotsRem f ds = checkQuotsRem' f qs r
   where (qs, r) = f /. ds
+
+checks :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+       => [Polynomial o k n]
+       -> [[Polynomial o k n]]
+       -> [(Polynomial o k n, [Polynomial o k n])]
+checks fs dss = [ (f, ds)
+                | f <- fs, ds <- dss
+                , not $ f `checkQuotsRem` ds
+                ]

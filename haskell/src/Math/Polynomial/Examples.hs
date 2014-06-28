@@ -91,12 +91,6 @@ ppr_eC2S3_1a_qr_gr =  pprQuotsRem eC2S3_1a_qr_gr
 ppr_eC2S3_1a_qr_lex :: Pretty
 ppr_eC2S3_1a_qr_lex = pprQuotsRem eC2S3_1a_qr_lex
 
-checkC2S3_1a_gr :: Bool
-checkC2S3_1a_gr =  checkQuotsRem eC2S3_1_gr eC2S3_1a_F
-
-checkC2S3_1a_lex :: Bool
-checkC2S3_1a_lex = checkQuotsRem eC2S3_1_lex eC2S3_1a_F
-
 
 eC2S3_1b_F :: DegreeOrder o => [Polynomial o Rational 3]
 eC2S3_1b_F =  ["x" - "y"^3, "x"*"y"^2 - "x"]
@@ -113,8 +107,9 @@ ppr_eC2S3_1b_qr_gr =  pprQuotsRem eC2S3_1b_qr_gr
 ppr_eC2S3_1b_qr_lex :: Pretty
 ppr_eC2S3_1b_qr_lex = pprQuotsRem eC2S3_1b_qr_lex
 
-checkC2S3_1b_gr :: Bool
-checkC2S3_1b_gr =  checkQuotsRem eC2S3_1_gr eC2S3_1b_F
 
-checkC2S3_1b_lex :: Bool
-checkC2S3_1b_lex = checkQuotsRem eC2S3_1_lex eC2S3_1b_F
+checks_gr :: [(Polynomial GrLex Rational 3, [Polynomial GrLex Rational 3])]
+checks_gr = checks [eC2S3_1_gr] [eC2S3_1a_F, eC2S3_1b_F]
+
+checks_lex :: [(Polynomial Lex Rational 3, [Polynomial Lex Rational 3])]
+checks_lex = checks [eC2S3_1_lex] [eC2S3_1a_F, eC2S3_1b_F]

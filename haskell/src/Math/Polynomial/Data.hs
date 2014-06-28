@@ -294,9 +294,9 @@ type DTerms k n = DList (Term k n)
 
 data DivisionContext o k n =
   DivisionContext
-  { divisee   :: !(Polynomial o k n)
-  , quotient  :: !(IntMap (Polynomial o k n, DTerms k n))
-  , remainder :: !(DTerms k n)
+  { contDivisee   :: !(Polynomial o k n)
+  , contQuotient  :: !(IntMap (Polynomial o k n, DTerms k n))
+  , contRemainder :: !(DTerms k n)
   }
 
 finalizeDTerms :: DTerms k n -> Polynomial o k n
@@ -311,16 +311,16 @@ runPolynomialDivision :: Polynomial o k n
                       -> PolynomialDivision o k n a
                       -> ([(Polynomial o k n, Polynomial o k n)], Polynomial o k n)
 runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
-  is = DivisionContext { divisee = f, quotient = Map.empty, remainder = mempty }
+  is = DivisionContext { contDivisee = f, contQuotient = Map.empty, contRemainder = mempty }
   result c =
-    ([(d, finalizeDTerms q) | (_ix, (d, q)) <- Map.toList $ quotient c],
-     finalizeDTerms $ remainder c)
+    ([(d, finalizeDTerms q) | (_ix, (d, q)) <- Map.toList $ contQuotient c],
+     finalizeDTerms $ contRemainder c)
 
 pushRemainder :: PolynomialDivision o k n ()
 pushRemainder = do
-  p         <-  divisee <$> lift get
+  p         <-  contDivisee <$> lift get
   (lt, p')  <-  hoist $ polyUncons p
-  lift $ modify (\c -> c { divisee = p', remainder = remainder c <> pure lt } )
+  lift $ modify (\c -> c { contDivisee = p', contRemainder = contRemainder c <> pure lt } )
 
 type Divisor o k n = (Term k n, (Int, Polynomial o k n))
 
@@ -328,14 +328,14 @@ applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => Divisor o k n
              -> PolynomialDivision o k n ()
 applyDivisor (ltF', (ix, f')) = do
-  p  <-  divisee <$> lift get
+  p  <-  contDivisee <$> lift get
   q  <-  hoist $ do
     lt <- leadingTerm p
     lt `termDiv` ltF'
   let plus (_, qn) (f, qo) = (f, qo <> qn)
       appendQ = insertWith plus ix (f', pure q)
-  lift $ modify (\c -> c { divisee   =  p - mapPoly (q <>) f'
-                         , quotient  =  appendQ $ quotient c
+  lift $ modify (\c -> c { contDivisee   =  p - mapPoly (q <>) f'
+                         , contQuotient  =  appendQ $ contQuotient c
                          })
 
 divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)

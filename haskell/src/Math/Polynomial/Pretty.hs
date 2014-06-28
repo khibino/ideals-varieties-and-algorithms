@@ -2,7 +2,7 @@
 {-# LANGUAGE DataKinds #-}
 
 module Math.Polynomial.Pretty
-       ( Doc
+       ( Doc, pretty
        , pprDegrees, pprMono, pprTerm
        , pprPoly, pprPolyO, pprQuots, pprQuotsRem', pprQuotsRem
        )
@@ -13,7 +13,7 @@ import Data.Monoid (Monoid(..), (<>))
 import Data.Ratio (Ratio, numerator, denominator)
 
 import Text.PrettyPrint.ANSI.Leijen
-  (Doc, Pretty (..), text, comma, parens, (<+>),
+  (Doc, Pretty (..), text, (<+>),
    green, magenta, cyan,
    tupled, encloseSep, lbracket, rbracket, line)
 
@@ -53,11 +53,8 @@ instance (Pretty a, Ord a, Integral a) => Pretty (Ratio a)  where
     d = denominator r
     int = d == 1
 
-pprDegrees :: Show a => Degrees' n a -> Doc
-pprDegrees =  parens . d . Degree.list  where
-  d []            =  mempty
-  d [x]           =  pshow x
-  d (x:xs@(_:_))  =  pshow x <> comma <> d xs
+pprDegrees :: Pretty a => Degrees' n a -> Doc
+pprDegrees =  tupled . map pretty . Degree.list  where
 
 _e0Degrees :: Degrees 3
 _e0Degrees =  primeDegrees [2, 1, 5]

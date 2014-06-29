@@ -25,12 +25,6 @@ sec3_1a_qr_gr =  sec3_1 /. sec3_1a_F
 sec3_1a_qr_lex :: PolyQuotsRem Lex Rational 3
 sec3_1a_qr_lex =  sec3_1 /. sec3_1a_F
 
-ppr_sec3_1a_qr_gr :: Doc
-ppr_sec3_1a_qr_gr =  pprQuotsRem sec3_1a_qr_gr
-
-ppr_sec3_1a_qr_lex :: Doc
-ppr_sec3_1a_qr_lex =  pprQuotsRem sec3_1a_qr_lex
-
 
 sec3_1b_F :: DegreeOrder o => [Polynomial o Rational 3]
 sec3_1b_F =  ["x" - "y"^3, "x"*"y"^2 - "x"]

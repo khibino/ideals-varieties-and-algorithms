@@ -1,0 +1,54 @@
+% グレブナ規定と代数多様体入門
+% 2014-06-30
+% 第2章 - §4 - 演習問題 - @khibino
+
+第2章 - §4 - 演習問題 - 4.
+-----
+a. スライスの端を取って、$x^3y^6, x^5y^4, x^6$
+
+b. 最小のものなので抜くことはできない。
+
+第2章 - §4 - 演習問題 - 10. (i)
+-----
+
+( i ) $>_{mixed}$は線形順序であることを示す。
+lex順序、grlex順序で場合分けして考えると、
+
+$$ x^\alpha >_{lex} x^\gamma \Rightarrow x^\alpha >_{mixed} x^\gamma $$
+
+$$ x^\alpha <_{lex} x^\gamma \Rightarrow x^\alpha <_{mixed} x^\gamma $$
+
+$$ x^\alpha = x^\gamma
+  \Rightarrow \left\{\begin{array}{l}
+                y^\beta >_{grlex} y^\delta \Rightarrow y^\beta >_{mixed} y^\delta \\
+                y^\beta = y^\delta \\
+                y^\beta <_{grlex} y^\delta \Rightarrow y^\beta <_{mixed} y^\delta \\
+              \end{array}\right. $$
+
+
+第2章 - §4 - 演習問題 - 10. (ii)
+-----
+
+( ii ) $x^\alpha y^\beta >_{mixed} x^\gamma y^\delta \Rightarrow
+x^{\alpha+\zeta} y^{\beta+\eta} >_{mixed} x^{\gamma+\zeta} y^{\delta+\eta},
+ ( \zeta \in \mathbb{Z}^n_{\ge 0}, \eta \in \mathbb{Z}^m_{\ge 0})$ を示す。
+
+これは
+
+$$\alpha >_{lex} \gamma\Rightarrow \alpha+\zeta >_{lex} \gamma+\zeta, (\alpha >_{lex} \gamma) $$
+
+$$\beta >_{grlex} \delta \Rightarrow \beta+\eta >_{grlex} \delta+\eta, (\alpha = \gamma) $$
+
+から従う。
+
+
+第2章 - §4 - 演習問題 - 10. (iii)
+-----
+
+( iii ) 任意の $\alpha \in \mathbb{Z}^n_{\ge 0}, \beta \in \mathbb{Z}^m_{\ge 0}$ において
+
+$$\alpha >_{lex} 0 \Rightarrow \alpha >_{mixed} 0 $$
+
+$$\alpha >_{lex} = 0 \wedge \beta \ge_{grlex} 0 \Rightarrow \alpha \ge_{mixed} 0 $$
+
+よって系6から $>_{mixed}$ は整列順序。

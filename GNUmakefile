@@ -9,7 +9,8 @@ targets = \
 	sec2-1-s5-gl.html \
 	sec2-2-s5-gl.html \
 	sec2-3-s5-gl.html \
-	sec2-4-s5-gl.html
+	sec2-4-s5-gl.html \
+	sec2-5-s5-gl.html
 
 
 md_format = \

@@ -57,7 +57,7 @@ $\forall f \in {\bf I}(V), f(x) = 0$。
 
 このとき、$x \not\in V$ とすると、
 $y \in V, g(y) = 0 \wedge g(x) \neq 0$ となるような $g$ を $V$ から得ることができる。
-このとき $g$ は $y \in V, g(y) = 0$ と${\bf I}(V)$ の定義を考えると $g \in {\bf I}(V)$ となるが、これは先の $f$ の仮定と矛盾する。
+このとき ${\bf I}(V)$ の定義から $f$ として $g$ を取ることができることになるが、$f(x) = 0$ と $g(x) \neq 0$ が矛盾する。
 よって $x \in V$。
 
 したがって、$\forall x \in {\bf V}({\bf I}(V)) \rightarrow x \in V$ となり、

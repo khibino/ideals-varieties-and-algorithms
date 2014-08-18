@@ -11,7 +11,7 @@ module Math.Polynomial.Data
        , Variables, variables, varc, fieldVariables', fieldVariables
 
        , Polynomial, GPolynomial, terms, polynomial
-       , polyPlus, polyMult, polySubt, polyNegate
+       , polyPlus, polyMult, polySubt, polyNegate, sPolynomial
        , Polynomial1
        , leadingTerm, leadingMono, multiDegree
 
@@ -20,7 +20,7 @@ module Math.Polynomial.Data
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
-import Control.Applicative ((<$>), pure, (<|>))
+import Control.Applicative (Applicative, (<$>), pure, (<|>))
 import Control.Monad (msum)
 import Control.Monad.Trans.Class (lift)
 import Control.Monad.Trans.Maybe (MaybeT (..))
@@ -30,6 +30,7 @@ import Data.Function (on)
 import Data.Maybe (mapMaybe)
 import Data.List (foldl', sortBy, groupBy)
 import Data.IntMap.Strict (IntMap, insertWith)
+import Data.Traversable (sequenceA)
 import qualified Data.IntMap.Strict as Map
 import Data.DList (DList)
 import qualified Data.DList as DList
@@ -257,8 +258,16 @@ p0 `polyMult` p1 =
   | y <- terms p1
   ]
 
+-- Only preserving order functions are allowed.
 mapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
 mapPoly f p = p { terms' = [ f t | t <- terms p ] }
+
+-- Only preserving order functions are allowed.
+mapPolyA :: Applicative f
+         => (Term k n -> f (Term k' n'))
+         -> Polynomial o k n
+         -> f (Polynomial o k' n')
+mapPolyA ff p = Polynomial <$> sequenceA [ ff t | t <- terms p ]
 
 polyNegate :: Num k => Polynomial o k n -> Polynomial o k n
 polyNegate =  mapPoly termNegate
@@ -281,6 +290,7 @@ instance (SingI n, Ord k, Num k, DegreeOrder o) => Num (Polynomial o k n)  where
   abs = id
   signum _ = 1
 
+-- Zero polynomial has no-result
 polyUncons :: Polynomial o k n -> Maybe (Term k n, Polynomial o k n)
 polyUncons = d . terms where
   d []      =  Nothing
@@ -295,6 +305,19 @@ leadingMono =  (mono <$>) . leadingTerm
 
 multiDegree :: Polynomial o k n -> Maybe (Degrees n)
 multiDegree =  (degrees <$>) . leadingMono
+
+sPolynomial :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+            => Polynomial o k n
+            -> Polynomial o k n
+            -> Maybe (Polynomial o k n)
+sPolynomial f g = do
+  ltF <- leadingTerm f
+  ltG <- leadingTerm g
+  let lcmT = lcmTerm ltF ltG
+
+  tsF <- mapPolyA ((`termDiv` ltF) . (lcmT <>)) $ f
+  tsG <- mapPolyA ((`termDiv` ltG) . (lcmT <>)) $ g
+  return $ tsF - tsG
 
 
 type DTerms k n = DList (Term k n)

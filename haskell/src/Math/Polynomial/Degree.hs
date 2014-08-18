@@ -61,7 +61,7 @@ subt x y
   | otherwise                         =  Nothing
   where sub = liftDeg2 (-) x y
 
-{-# SPECIALIZE lcm :: Degrees' n Int -> Degrees' n Int -> Degrees' n Int #-}
+{-# SPECIALIZE lcm' :: Degrees' n Int -> Degrees' n Int -> Degrees' n Int #-}
 lcm' :: (Integral a, Ord a) => Degrees' n a -> Degrees' n a -> Degrees' n a
 lcm' =  liftDeg2 max
 

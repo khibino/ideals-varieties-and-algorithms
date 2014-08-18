@@ -5,7 +5,7 @@
 
 module Math.Polynomial.Data
        ( Mono, degrees, primeMono, monoSing, monoCompare
-       , Term, coeff, mono, term, totalDeg, coeffMult
+       , Term, coeff, mono, term, totalDeg, coeffMult, lcmTerm
 
        , Var, varNum
        , Variables, variables, varc, fieldVariables', fieldVariables
@@ -64,6 +64,9 @@ primeMono =  Mono . primeDegrees
 monoDiv :: Mono k n -> Mono k n -> Maybe (Mono k n)
 monoDiv x y = Mono <$> (Degree.subt `on` degrees) x y
 
+monoLcm :: Mono k n -> Mono k n -> Mono k n
+monoLcm x y = Mono $ (Degree.lcm' `on` degrees) x y
+
 
 data Term k (n :: Nat) =
   Term
@@ -114,6 +117,9 @@ termNegate t = t { coeff' = - coeff t }
 
 termDiv :: Fractional k => Term k n -> Term k n -> Maybe (Term k n)
 termDiv x y =  Term (coeff x / coeff y) <$> (monoDiv `on` mono) x y
+
+lcmTerm :: Num k => Term k n -> Term k n -> Term k n
+lcmTerm x y =  Term { coeff' = 1, mono' = (monoLcm `on` mono') x y }
 
 -- termSing :: SingI n => Term k n -> Sing n
 -- termSing =  const sing

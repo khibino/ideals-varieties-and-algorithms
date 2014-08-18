@@ -50,6 +50,9 @@ e2Term =  "1"
 e3Term :: Term Rational 2
 e3Term =  e0Term <> e1Term
 
+e0Lcm :: Term Rational 3
+e0Lcm =  "x" ^. 2 *. "y" `lcm'` "x" *. "y" ^. 3
+
 
 e0Poly :: GPolynomial Rational 3
 e0Poly =  1

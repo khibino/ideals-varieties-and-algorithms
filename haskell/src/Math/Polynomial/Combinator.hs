@@ -3,7 +3,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Math.Polynomial.Combinator
-       ( (^.), (*.), (.*), (/.), p
+       ( (^.), (*.), (.*), lcm', (/.), p
        ) where
 
 import GHC.TypeLits (SingI)
@@ -15,7 +15,7 @@ import Math.Polynomial.Degree (Degrees', primeDegrees)
 import Math.Polynomial.Ord (DegreeOrder (..))
 
 import Math.Polynomial.Data
-  (Var, varNum, Mono, primeMono, Term, term, coeffMult,
+  (Var, varNum, Mono, primeMono, Term, term, coeffMult, lcmTerm,
    Polynomial, polynomial, PolyQuotsRem, polyQuotRem)
 
 
@@ -62,6 +62,9 @@ v ^. e = term 1 $ varDegVector' v e
 (.*) :: Num k => k -> Term k n -> Term k n
 (.*) =  coeffMult
 
+lcm' :: Num k => Term k n -> Term k n -> Term k n
+lcm' =  lcmTerm
+
 p :: (Ord k, Num k, DegreeOrder o) => [Term k n] -> Polynomial o k n
 p =  polynomial
 
@@ -73,4 +76,4 @@ p =  polynomial
 
 infixr 8 ^.
 infixr 7 *., .*
-infixl 5 /.
+infixl 5 /., `lcm'`

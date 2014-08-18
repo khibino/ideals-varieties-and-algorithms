@@ -3,7 +3,7 @@
 
 module Math.Polynomial.Degree
        ( Degrees', Degrees, primeDegrees
-       , list, rev, subt, total
+       , list, rev, subt, lcm', total
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
@@ -60,6 +60,10 @@ subt x y
   | find (< 0) (list sub) == Nothing  =  Just sub
   | otherwise                         =  Nothing
   where sub = liftDeg2 (-) x y
+
+{-# SPECIALIZE lcm :: Degrees' n Int -> Degrees' n Int -> Degrees' n Int #-}
+lcm' :: (Integral a, Ord a) => Degrees' n a -> Degrees' n a -> Degrees' n a
+lcm' =  liftDeg2 max
 
 {-# SPECIALIZE sum' :: [Int] -> Int #-}
 sum' :: Num a => [a] -> a

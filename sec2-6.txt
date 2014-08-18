@@ -7,12 +7,57 @@
 -----
 $G = \{g_1,...,g_t\}$, $G\prime = \{g\prime_1,...,g\prime_{t\prime}\}$ とすると、
 グレブナ基底の定義から、
-$<LT(I)> = <LT(g_1),...,LT(g_t)> = <LT(g\prime_1),...,LT(g\prime_{t\prime})>$。
+$<\mathrm{LT}(I)> = <\mathrm{LT}(g_1),...,\mathrm{LT}(g_t)> = <\mathrm{LT}(g\prime_1),...,\mathrm{LT}(g\prime_{t\prime})>$ .
 
-なので、$\overline{f}^G$, $\overline{f}^{G\prime}$ ともに $LT(I)$ のすべての元で割り切れない。これは問題1のaの$r$の条件を満たす。
+なので、$\overline{f}^G$, $\overline{f}^{G\prime}$ ともに $\mathrm{LT}(I)$ のすべての元で割り切れない。これは問題1のaの$r$の条件を満たす。
 
-よって問題1のbの結果から$r$は一意となるので $\overline{f}^G = \overline{f}^{G\prime}$。
+よって問題1のbの結果から$r$は一意となるので $\overline{f}^G = \overline{f}^{G\prime}$ .
 
 
-第2章 - §5 - 演習問題 - 10.
+第2章 - §5 - 演習問題 - 10. a.
 -----
+
+$\mathrm{LM}(f)$ と $\mathrm{LM}(g)$ が互いに素であることから、
+$\forall i, multideg(f)_i = 0 \vee multideg(g)_i = 0$.
+
+これを使って $LCM(\mathrm{LM}(f), \mathrm{LM}(g))$ を計算すると、
+
+$$LCM(\mathrm{LM}(f), \mathrm{LM}(g))$$
+
+$$ = x^{\max(multideg(f), multideg(g))} = x^{multideg(f) + multideg(g)} $$
+
+$$ = x^{multideg(f)} \cdot x^{multideg(g)} $$
+
+$$ = \mathrm{LM}(f) \cdot \mathrm{LM}(g)$$
+
+$$ = \mathrm{LT}(f) \cdot \mathrm{LT}(g)$$
+
+
+第2章 - §5 - 演習問題 - 10. a.
+-----
+
+さらにここから $S(f,g)$ を計算すれば、
+
+$$S(f,g)$$
+
+$$ = \frac{LCM(\mathrm{LM}(f), \mathrm{LM}(g))}{\mathrm{LT}(f)}f - \frac{LCM(\mathrm{LM}(f), \mathrm{LM}(g))}{\mathrm{LT}(g)}g $$
+
+$$ = \frac{\mathrm{LT}(f) \cdot \mathrm{LT}(g)}{\mathrm{LT}(f)}f - \frac{\mathrm{LT}(f) \cdot \mathrm{LT}(g)}{\mathrm{LT}(g)}g $$
+
+$$ = \mathrm{LT}(g)f - \mathrm{LT}(f)g $$
+
+$$ = -(g - \mathrm{LT}(g))f + (f - \mathrm{LT}(f))g $$.
+
+
+第2章 - §5 - 演習問題 - 10. b.
+-----
+
+a. でも見たように、
+
+$$S(f,g)$$
+
+$$ = -(g - \mathrm{LT}(g))f + (f - \mathrm{LT}(f))g $$
+
+$$ = \mathrm{LT}(g)f - \mathrm{LT}(f)g $$
+
+であるので、$S(f, g)$ の全ての項は $\mathrm{LT}(g)$ または $\mathrm{LT}(f)$ の倍元となっている。先頭単項式もそれに従う。

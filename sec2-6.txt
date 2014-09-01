@@ -14,7 +14,7 @@ $<\mathrm{LT}(I)> = <\mathrm{LT}(g_1),...,\mathrm{LT}(g_t)> = <\mathrm{LT}(g\pri
 よって問題1のbの結果から$r$は一意となるので $\overline{f}^G = \overline{f}^{G\prime}$ .
 
 
-第2章 - §5 - 演習問題 - 10. a.
+第2章 - §6 - 演習問題 - 10. a.
 -----
 
 $\mathrm{LM}(f)$ と $\mathrm{LM}(g)$ が互いに素であることから、
@@ -33,7 +33,7 @@ $$ = \mathrm{LM}(f) \cdot \mathrm{LM}(g)$$
 $$ = \mathrm{LT}(f) \cdot \mathrm{LT}(g)$$
 
 
-第2章 - §5 - 演習問題 - 10. a.
+第2章 - §6 - 演習問題 - 10. a.
 -----
 
 さらにここから $S(f,g)$ を計算すれば、
@@ -49,7 +49,7 @@ $$ = \mathrm{LT}(g)f - \mathrm{LT}(f)g $$
 $$ = -(g - \mathrm{LT}(g))f + (f - \mathrm{LT}(f))g $$.
 
 
-第2章 - §5 - 演習問題 - 10. b.
+第2章 - §6 - 演習問題 - 10. b.
 -----
 
 a. でも見たように、

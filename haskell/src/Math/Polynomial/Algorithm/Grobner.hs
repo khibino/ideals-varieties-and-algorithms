@@ -72,4 +72,4 @@ reduce fs = map snd $ rps where
 buchberger :: (Fractional k, Ord k, SingI n, DegreeOrder o)
            => [Polynomial o k n]
            -> [Polynomial o k n]
-buchberger = reduce . buchberger'
+buchberger =  reduce . buchberger'

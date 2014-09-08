@@ -251,12 +251,8 @@ p0 `polyMult` p1 =
   ]
 
 -- Only preserving order functions are allowed.
-mapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
-mapPoly f p = p { terms' = [ f t | t <- terms p ] }
-
--- Export name
 unsafeMapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
-unsafeMapPoly =  mapPoly
+unsafeMapPoly f p = p { terms' = [ f t | t <- terms p ] }
 
 -- Only preserving order functions are allowed.
 mapPolyA :: Applicative f
@@ -266,7 +262,7 @@ mapPolyA :: Applicative f
 mapPolyA ff p = Polynomial <$> sequenceA [ ff t | t <- terms p ]
 
 polyNegate :: Num k => Polynomial o k n -> Polynomial o k n
-polyNegate =  mapPoly termNegate
+polyNegate =  unsafeMapPoly termNegate
 
 polySubt :: (Ord k, Num k, DegreeOrder o)
          => Polynomial o k n

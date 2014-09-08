@@ -16,7 +16,8 @@ import Math.Polynomial.Ord (DegreeOrder (..))
 
 import Math.Polynomial.Data
   (Var, varNum, Mono, primeMono, Term, term, coeffMult, termLcm,
-   Polynomial, polynomial, PolyQuotsRem, polyQuotRem)
+   Polynomial, polynomial)
+import Math.Polynomial.Algorithm.Division (PolyQuotsRem, polyQuotRem)
 
 
 varDegVector' :: (SingI n, Integral a) => Var k n -> a -> [a]

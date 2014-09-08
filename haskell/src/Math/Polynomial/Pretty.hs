@@ -22,7 +22,8 @@ import qualified Math.Polynomial.Degree as Degree
 import Math.Polynomial.Ord (DegOrder2)
 import Math.Polynomial.Data
   (Mono, degrees, primeMono, monoSing, Term, coeff, mono,
-   variables, Polynomial, terms, PolyQuot (..), PolyQuotsRem (..))
+   variables, Polynomial, terms)
+import Math.Polynomial.Algorithm.Division (PolyQuot (..), PolyQuotsRem (..))
 
 
 pshow :: Show a => a -> Doc

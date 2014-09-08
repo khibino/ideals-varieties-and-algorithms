@@ -4,36 +4,25 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module Math.Polynomial.Data
-       ( Mono, degrees, primeMono, monoSing, monoCompare
-       , Term, coeff, mono, term, totalDeg, coeffMult, termLcm
+       ( Mono, degrees, primeMono, monoSing, monoCompare, monoLcm, monoDiv
+       , Term, coeff, mono, term, totalDeg, coeffMult, termLcm, termDiv
 
        , Var, varNum
        , Variables, variables, varc, fieldVariables', fieldVariables
 
        , Polynomial, GPolynomial, terms, polynomial
+       , unsafePolynomial, unsafeMapPoly
        , polyPlus, polyMult, polySubt, polyNegate, sPolynomial
        , Polynomial1
-       , leadingTerm, leadingMono, multiDegree
-
-       , PolyQuot (..), PolyQuotsRem (..)
-       , polyQuotRem
+       , polyUncons, leadingTerm, leadingMono, multiDegree
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
-import Control.Applicative (Applicative, (<$>), pure, (<|>))
-import Control.Monad (msum)
-import Control.Monad.Trans.Class (lift)
-import Control.Monad.Trans.Maybe (MaybeT (..))
-import Control.Monad.Trans.State.Strict (State, get, modify, execState)
+import Control.Applicative (Applicative, (<$>))
 import Data.Monoid (Monoid(..), (<>))
 import Data.Function (on)
-import Data.Maybe (mapMaybe)
 import Data.List (foldl', sortBy, groupBy)
-import Data.IntMap.Strict (IntMap, insertWith)
 import Data.Traversable (sequenceA)
-import qualified Data.IntMap.Strict as Map
-import Data.DList (DList)
-import qualified Data.DList as DList
 import Data.String (IsString (..))
 
 import Math.Polynomial.Degree (Degrees, primeDegrees)
@@ -198,6 +187,9 @@ newtype Polynomial o k (n :: Nat) =
 terms :: Polynomial o k n -> [Term k n]
 terms =  terms'
 
+unsafePolynomial :: [Term k n] -> Polynomial o k n
+unsafePolynomial =  Polynomial
+
 -- type propagate hack
 polyOrder :: DegreeOrder o => Polynomial o k n -> DegOrder2 o n
 polyOrder =  const degreeOrder
@@ -262,6 +254,10 @@ p0 `polyMult` p1 =
 mapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
 mapPoly f p = p { terms' = [ f t | t <- terms p ] }
 
+-- Export name
+unsafeMapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
+unsafeMapPoly =  mapPoly
+
 -- Only preserving order functions are allowed.
 mapPolyA :: Applicative f
          => (Term k n -> f (Term k' n'))
@@ -318,101 +314,6 @@ sPolynomial f g = do
   tsF <- mapPolyA ((`termDiv` ltF) . (lcmT <>)) $ f
   tsG <- mapPolyA ((`termDiv` ltG) . (lcmT <>)) $ g
   return $ tsF - tsG
-
-
-type DTerms k n = DList (Term k n)
-
-data DivisionContext o k n =
-  DivisionContext
-  { contDivisee   :: !(Polynomial o k n)
-  , contQuotient  :: !(IntMap (Polynomial o k n, DTerms k n))
-  , contRemainder :: !(DTerms k n)
-  }
-
-finalizeDTerms :: DTerms k n -> Polynomial o k n
-finalizeDTerms =  Polynomial . DList.toList
-
-type PolynomialDivision o k n = MaybeT (State (DivisionContext o k n))
-
-hoist :: Maybe a -> PolynomialDivision o k n a
-hoist =  MaybeT . return
-
-data PolyQuot o k n =
-  PolyQuot
-  { quotient :: Polynomial o k n
-  , divisor  :: Polynomial o k n
-  } deriving (Eq, Ord, Show)
-
-data PolyQuotsRem o k n =
-  PolyQuotsRem
-  { quots     :: [PolyQuot o k n]
-  , remainder :: Polynomial o k n
-  } deriving (Eq, Ord, Show)
-
-runPolynomialDivision :: Polynomial o k n
-                      -> PolynomialDivision o k n a
-                      -> PolyQuotsRem o k n
-runPolynomialDivision f = result . (`execState` is) . runMaybeT  where
-  is = DivisionContext { contDivisee = f, contQuotient = Map.empty, contRemainder = mempty }
-  result c =
-    (PolyQuotsRem
-     { quots = [ PolyQuot { quotient  =  finalizeDTerms q
-                          , divisor   =  d
-                          }
-               | (_ix, (d, q)) <- Map.toList $ contQuotient c ]
-     , remainder = finalizeDTerms $ contRemainder c
-     })
-
-pushRemainder :: PolynomialDivision o k n ()
-pushRemainder = do
-  p         <-  contDivisee <$> lift get
-  (lt, p')  <-  hoist $ polyUncons p
-  lift $ modify (\c -> c { contDivisee = p', contRemainder = contRemainder c <> pure lt } )
-
-type Divisor o k n = (Term k n, (Int, Polynomial o k n))
-
-applyDivisor :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => Divisor o k n
-             -> PolynomialDivision o k n ()
-applyDivisor (ltF', (ix, f')) = do
-  p  <-  contDivisee <$> lift get
-  q  <-  hoist $ do
-    lt <- leadingTerm p
-    lt `termDiv` ltF'
-  let plus (_, qn) (f, qo) = (f, qo <> qn)
-      appendQ = insertWith plus ix (f', pure q)
-  lift $ modify (\c -> c { contDivisee   =  p - mapPoly (q <>) f'
-                         , contQuotient  =  appendQ $ contQuotient c
-                         })
-
-divisionLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-             => [Divisor o k n]
-             -> PolynomialDivision o k n ()
-divisionLoop dps = rec'  where
-  rec' =
-    do msum $ map applyDivisor dps
-       rec'
-    <|>
-    do pushRemainder
-       rec'
-    <|>
-       return ()
-
-prepareDivisors :: (Num k, Ord k, SingI n, DegreeOrder o)
-                => [Polynomial o k n]
-                -> [Divisor o k n]
-prepareDivisors ds = dps  where
-  tryD p@(_, d) = do
-    lt <- leadingTerm d
-    return (lt, p)
-  dps = mapMaybe tryD $ zip [0..] ds
-
-polyQuotRem :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-            => Polynomial o k n
-            -> [Polynomial o k n]
-            -> PolyQuotsRem o k n
-polyQuotRem f dps =
-  runPolynomialDivision f . divisionLoop $ prepareDivisors dps
 
 
 type Polynomial1 o k = Polynomial o k 1

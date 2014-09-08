@@ -19,6 +19,7 @@ library
                        Math.Polynomial.Degree
                        Math.Polynomial.Ord
                        Math.Polynomial.Data
+                       Math.Polynomial.Algorithm.Division
                        Math.Polynomial.Pretty
                        Math.Polynomial.Combinator
                        Math.Polynomial.Imports

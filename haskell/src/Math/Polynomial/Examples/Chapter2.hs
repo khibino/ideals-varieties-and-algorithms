@@ -78,3 +78,6 @@ checks_grev =  checks [sec3_1, sec3_2] [sec3_1a_F, sec3_1b_F, sec3_2a_F, sec3_2b
 
 checks_lex :: [(Polynomial Lex Rational 3, [Polynomial Lex Rational 3])]
 checks_lex =  checks [sec3_1, sec3_2] [sec3_1a_F, sec3_1b_F, sec3_2a_F, sec3_2b_F]
+
+sec7_2a_lex :: [Polynomial Lex Rational 3]
+sec7_2a_lex =  ["x" ^ 2 * "y" - 1, "x" * "y"^2 - "x"]

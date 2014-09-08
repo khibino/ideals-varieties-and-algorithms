@@ -1,6 +1,7 @@
 module Math.Polynomial.Algorithm.Grobner
        ( sPairs, sPairCriterion
        , buchberger', reduce, buchberger
+       , BuchStep, buchbergerSteps'
        ) where
 
 import Data.Maybe (catMaybes, mapMaybe)
@@ -51,6 +52,30 @@ buchberger' fs@(_:_)  =  loop (sPairs fs) fs where
     | otherwise   =  loop rsps ds1
     where (ds1, rsps) = divLoop sps ds0
   -- (gbs, ys)  =  divLoop (sPairs fs ++ ys) fs
+
+type BuchStep o k n = ([Polynomial o k n], (Polynomial o k n, Polynomial o k n))
+
+divLoopSteps :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+             => [Polynomial o k n]
+             -> [Polynomial o k n]
+             -> ([Polynomial o k n], [BuchStep o k n])
+divLoopSteps   []     ds  =  (ds, [])
+divLoopSteps  (f:fs)  ds
+  | r == 0         =  divLoopSteps fs ds
+  | otherwise      =  (gs, (mapMaybe (sPolynomial r) ds, (f, r)) : rs)
+  where r = remainder $ f `polyQuotRem` ds
+        (gs, rs) = divLoopSteps fs (r:ds)
+
+buchbergerSteps' :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+                 => [Polynomial o k n]
+                 -> ([Polynomial o k n], [[BuchStep o k n]])
+buchbergerSteps'       []  =  ([], [])
+buchbergerSteps' fs@(_:_)  =  loop (sPairs fs) fs where
+  loop sps ds0
+    | rsps == []  =  (ds1, [])
+    | otherwise   =  let (gs, st) = loop rsps ds1 in (gs, steps : st)
+    where (ds1, steps) = divLoopSteps sps ds0
+          rsps = concat $ map fst steps
 
 monoPair :: Fractional k => Polynomial o k n -> Maybe (Mono k n, Polynomial o k n)
 monoPair f = do

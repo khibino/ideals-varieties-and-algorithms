@@ -15,7 +15,7 @@ import Math.Polynomial.Degree (Degrees', primeDegrees)
 import Math.Polynomial.Ord (DegreeOrder (..))
 
 import Math.Polynomial.Data
-  (Var, varNum, Mono, primeMono, Term, term, coeffMult, lcmTerm,
+  (Var, varNum, Mono, primeMono, Term, term, coeffMult, termLcm,
    Polynomial, polynomial, PolyQuotsRem, polyQuotRem)
 
 
@@ -63,7 +63,7 @@ v ^. e = term 1 $ varDegVector' v e
 (.*) =  coeffMult
 
 lcm' :: Num k => Term k n -> Term k n -> Term k n
-lcm' =  lcmTerm
+lcm' =  termLcm
 
 p :: (Ord k, Num k, DegreeOrder o) => [Term k n] -> Polynomial o k n
 p =  polynomial

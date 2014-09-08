@@ -5,7 +5,7 @@
 
 module Math.Polynomial.Data
        ( Mono, degrees, primeMono, monoSing, monoCompare
-       , Term, coeff, mono, term, totalDeg, coeffMult, lcmTerm
+       , Term, coeff, mono, term, totalDeg, coeffMult, termLcm
 
        , Var, varNum
        , Variables, variables, varc, fieldVariables', fieldVariables
@@ -119,8 +119,8 @@ termNegate t = t { coeff' = - coeff t }
 termDiv :: Fractional k => Term k n -> Term k n -> Maybe (Term k n)
 termDiv x y =  Term (coeff x / coeff y) <$> (monoDiv `on` mono) x y
 
-lcmTerm :: Num k => Term k n -> Term k n -> Term k n
-lcmTerm x y =  Term { coeff' = 1, mono' = (monoLcm `on` mono') x y }
+termLcm :: Num k => Term k n -> Term k n -> Term k n
+termLcm x y =  Term { coeff' = 1, mono' = (monoLcm `on` mono') x y }
 
 -- termSing :: SingI n => Term k n -> Sing n
 -- termSing =  const sing
@@ -313,7 +313,7 @@ sPolynomial :: (Fractional k, Ord k, SingI n, DegreeOrder o)
 sPolynomial f g = do
   ltF <- leadingTerm f
   ltG <- leadingTerm g
-  let lcmT = lcmTerm ltF ltG
+  let lcmT = termLcm ltF ltG
 
   tsF <- mapPolyA ((`termDiv` ltF) . (lcmT <>)) $ f
   tsG <- mapPolyA ((`termDiv` ltG) . (lcmT <>)) $ g

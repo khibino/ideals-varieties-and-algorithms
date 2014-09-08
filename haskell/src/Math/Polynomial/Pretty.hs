@@ -5,6 +5,7 @@ module Math.Polynomial.Pretty
        ( Doc, pretty
        , pprDegrees, pprMono, pprTerm
        , pprPoly, pprPolyO, pprQuot, pprQuotsRem', pprQuotsRem
+       , pariPoly
        )
        where
 
@@ -32,7 +33,9 @@ pshow =  text . show
 opt :: String -> Doc
 opt =  green . text
 
-binPpr' :: Doc -> Doc -> Doc -> Doc
+type BinOp = Doc -> Doc -> Doc
+
+binPpr' :: Doc -> BinOp
 binPpr' op x y = x <> op <> y
 
 pr :: (Doc -> Doc) -> String -> Doc
@@ -53,20 +56,24 @@ instance (Pretty a, Ord a, Integral a) => Pretty (Ratio a)  where
 pprDegrees :: Pretty a => Degrees' n a -> Doc
 pprDegrees =  tupled . map pretty . Degree.list  where
 
-pprMono :: SingI n => Mono k n -> Doc
-pprMono m = fold
-            [ var `pow` deg
-            | (var, deg) <- zip vs ds
-            , deg > 0
-            ]                     where
+pprMono' :: SingI n => BinOp -> Mono k n -> Doc
+pprMono' mulOp m =
+  fold
+  [ var `pow` deg
+  | (var, deg) <- zip vs ds
+  , deg > 0
+  ]                     where
   fold []        =  text "1"
-  fold ts@(_:_)  =  foldr1 (<+>) ts
+  fold ts@(_:_)  =  foldr1 mulOp ts
   vs  = variables  $ monoSing m
   ds  = Degree.list $ degrees m
   pow v n' = hat n' $ pshow v  where
     hat n
       | n == 1     =  id
       | otherwise  =  (<> opt "^" <> pshow n)
+
+pprMono :: SingI n => Mono k n -> Doc
+pprMono =  pprMono' (<+>)
 
 _e0Mono :: Mono Rational 3
 _e0Mono =  mempty
@@ -77,17 +84,26 @@ _e1Mono =  primeMono [4, 2, 1]
 _e2Mono :: Mono Rational 3
 _e2Mono =  primeMono [5, 0, 2]
 
-pprTerm :: (Eq k, Num k, Pretty k, SingI n) => Term k n -> Doc
-pprTerm t = coeff t `mul` mono t  where
+pprTerm' :: (Eq k, Num k, Pretty k, SingI n) => BinOp -> Term k n -> Doc
+pprTerm' mulOp t = coeff t `mul` mono t  where
   mul c m
-    | c == 1      = pprMono m
+    | c == 1      = pprMono' mulOp m
     | m == mempty = pretty c
-    | otherwise   = pretty c <> text " " <> pprMono m
+    | otherwise   = pretty c `mulOp` pprMono' mulOp m
 
-pprPoly :: (Eq k, Num k, Pretty k, SingI n) => Polynomial o k n -> Doc
-pprPoly p = fold [ pprTerm t | t <- terms p ]  where
+pprTerm :: (Eq k, Num k, Pretty k, SingI n) => Term k n -> Doc
+pprTerm =  pprTerm' (<+>)
+
+pprPoly' :: (Eq k, Num k, Pretty k, SingI n) => BinOp -> Polynomial o k n -> Doc
+pprPoly' mulOp p = fold [ pprTerm' mulOp t | t <- terms p ]  where
   fold []        =  text "0"
   fold ts@(_:_)  =  foldr1 (binPpr' $ text " + ") ts
+
+pariPoly :: (Eq k, Num k, Pretty k, SingI n) => Polynomial o k n -> Doc
+pariPoly =  pprPoly' (\a b -> a <> text " * " <> b)
+
+pprPoly :: (Eq k, Num k, Pretty k, SingI n) => Polynomial o k n -> Doc
+pprPoly = pprPoly' (<+>)
 
 pprPolyO :: (Eq k, Num k, Pretty k, SingI n) => DegOrder2 o n -> Polynomial o k n -> Doc
 pprPolyO =  const pprPoly

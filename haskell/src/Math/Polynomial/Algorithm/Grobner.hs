@@ -1,13 +1,17 @@
 module Math.Polynomial.Algorithm.Grobner
        ( sPairs, sPairCriterion
-       , buchberger' ) where
+       , buchberger', reduce, buchberger
+       ) where
 
 import Data.Maybe (catMaybes, mapMaybe)
-import Data.List (tails)
+import Data.List (sortBy, tails)
+import Data.Function (on)
+import Control.Monad (foldM)
 import GHC.TypeLits (SingI)
 
-import Math.Polynomial.Ord (DegreeOrder)
-import Math.Polynomial.Data (Polynomial, sPolynomial)
+import Math.Polynomial.Ord (DegreeOrder, invCompare, ordGrLex)
+import Math.Polynomial.Data
+  (Polynomial, sPolynomial, polyNormalize, Mono, leadingMono, monoDiv, monoCompare)
 import Math.Polynomial.Algorithm.Division (polyQuotRem, remainder)
 
 
@@ -47,3 +51,25 @@ buchberger' fs@(_:_)  =  loop (sPairs fs) fs where
     | otherwise   =  loop rsps ds1
     where (ds1, rsps) = divLoop sps ds0
   -- (gbs, ys)  =  divLoop (sPairs fs ++ ys) fs
+
+monoPair :: Fractional k => Polynomial o k n -> Maybe (Mono k n, Polynomial o k n)
+monoPair f = do
+  lm <- leadingMono f
+  return (lm, polyNormalize f)
+
+uncons :: [t] -> Maybe (t, [t])
+uncons  []    = Nothing
+uncons (x:xs) = Just (x, xs)
+
+reduce :: Fractional k => [Polynomial o k n] -> [Polynomial o k n]
+reduce fs = map snd $ rps where
+  mps  = sortBy (invCompare (monoCompare ordGrLex `on` fst)) $ mapMaybe monoPair fs
+  cps = mapMaybe uncons . tails $ mps
+  rfilter pf@(lmF, _f) (lmG, _g) =
+    maybe (Just pf) (const Nothing) $ lmF `monoDiv` lmG
+  rps = mapMaybe (uncurry $ foldM rfilter) cps
+
+buchberger :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+           => [Polynomial o k n]
+           -> [Polynomial o k n]
+buchberger = reduce . buchberger'

@@ -14,7 +14,8 @@ module Math.Polynomial.Data
        , unsafePolynomial, unsafeMapPoly
        , polyPlus, polyMult, polySubt, polyNegate, sPolynomial
        , Polynomial1
-       , polyUncons, leadingTerm, leadingMono, multiDegree
+       , polyUncons, leadingTerm, leadingMono, leadingCoeff, multiDegree
+       , polyNormalize
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
@@ -97,6 +98,9 @@ termListCompare o xs ys = xs `comp` ys  where
 
 coeffMult :: Num k => k -> Term k n -> Term k n
 coeffMult x t = t { coeff' = x * coeff t }
+
+coeffDiv :: Fractional k => Term k n -> k -> Term k n
+coeffDiv t d = coeffMult (1/d) t
 
 totalDeg :: Term k n -> Int
 totalDeg =  Degree.total . degrees . mono
@@ -287,8 +291,16 @@ leadingTerm =  (fst <$>) . polyUncons
 leadingMono :: Polynomial o k n -> Maybe (Mono k n)
 leadingMono =  (mono <$>) . leadingTerm
 
+leadingCoeff :: Polynomial o k n -> Maybe k
+leadingCoeff =  (coeff <$>) . leadingTerm
+
 multiDegree :: Polynomial o k n -> Maybe (Degrees n)
 multiDegree =  (degrees <$>) . leadingMono
+
+polyNormalize :: Fractional k => Polynomial o k n -> Polynomial o k n
+polyNormalize p = maybe p id $ do
+  lc <- leadingCoeff p
+  return $ unsafeMapPoly (`coeffDiv` lc) p
 
 sPolynomial :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => Polynomial o k n

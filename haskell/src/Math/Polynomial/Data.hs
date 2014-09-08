@@ -18,11 +18,10 @@ module Math.Polynomial.Data
        ) where
 
 import GHC.TypeLits (Nat, Sing, SingI, SingE, sing, fromSing)
-import Control.Applicative (Applicative, (<$>))
+import Control.Applicative ((<$>))
 import Data.Monoid (Monoid(..), (<>))
 import Data.Function (on)
 import Data.List (foldl', sortBy, groupBy)
-import Data.Traversable (sequenceA)
 import Data.String (IsString (..))
 
 import Math.Polynomial.Degree (Degrees, primeDegrees)
@@ -254,13 +253,6 @@ p0 `polyMult` p1 =
 unsafeMapPoly :: (Term k n -> Term k' n') -> Polynomial o k n -> Polynomial o k' n'
 unsafeMapPoly f p = p { terms' = [ f t | t <- terms p ] }
 
--- Only preserving order functions are allowed.
-mapPolyA :: Applicative f
-         => (Term k n -> f (Term k' n'))
-         -> Polynomial o k n
-         -> f (Polynomial o k' n')
-mapPolyA ff p = Polynomial <$> sequenceA [ ff t | t <- terms p ]
-
 polyNegate :: Num k => Polynomial o k n -> Polynomial o k n
 polyNegate =  unsafeMapPoly termNegate
 
@@ -306,10 +298,10 @@ sPolynomial f g = do
   ltF <- leadingTerm f
   ltG <- leadingTerm g
   let lcmT = termLcm ltF ltG
+  lcmDivF <- lcmT `termDiv` ltF
+  lcmDivG <- lcmT `termDiv` ltG
 
-  tsF <- mapPolyA ((`termDiv` ltF) . (lcmT <>)) $ f
-  tsG <- mapPolyA ((`termDiv` ltG) . (lcmT <>)) $ g
-  return $ tsF - tsG
+  return $ unsafeMapPoly (lcmDivF <>) f - unsafeMapPoly (lcmDivG <>) g
 
 
 type Polynomial1 o k = Polynomial o k 1

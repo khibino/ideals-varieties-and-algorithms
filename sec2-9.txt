@@ -24,3 +24,38 @@ $\gamma$次斉次の定義を満たす。
 
 第2章 - §9 - 演習問題 - 9.
 -----
+
+$(i, j) \not\in B \wedge (i, j) \not\in B'$ のもとで、
+$S(f_i, f_j) \rightarrow_{G} 0 \vee \mathrm{Criterion}(f_i, f_j, B) = true$ を仮定する。
+
+$|B'| < |B|$ のとき、
+
+アルゴリズムから、
+
+$$B' = B - (k, l),  (i, j) \neq (k, l)$$
+
+$S(f_i, f_j) \rightarrow_{G} 0$ ならば、$G$ は変化しないので $B'$ の状況でも成立。
+
+$\mathrm{Criterion}(f_i, f_j, B) = true$ ならば、ある $m$ があって、
+$\mathrm{LT}(g_m)は \mathrm{LCM}(\mathrm{LT}(g_i), \mathrm{LT}(g_j))$ を割り切る。
+これも同じ $m$ で、 $B'$ でも成立。
+
+
+
+第2章 - §9 - 演習問題 - 9.
+-----
+
+$|B'| >= |B|$ のとき、
+
+アルゴリズムから、
+
+$$f_t = S(f_k, f_l)
+, G  = G \cup \{f_t\}
+, B' = (B - (k, l)) \cup \{(i, t) | t \in {1,..,t-1}\}
+,  (i, j) \neq (k, l)$$
+
+$S(f_i, f_j) \rightarrow_{G} 0$ ならば、$G$ は基底が追加されているので $B'$ の状況でも成立。
+
+$\mathrm{Criterion}(f_i, f_j, B) = true$ ならば、ある $m$ があって、
+$\mathrm{LT}(g_m)は \mathrm{LCM}(\mathrm{LT}(g_i), \mathrm{LT}(g_j))$ を割り切る。
+やはり $G$ は基底が追加されているので、同じ $m$ で、 $B'$ でも成立。

@@ -1,0 +1,26 @@
+% グレブナ規定と代数多様体入門
+% 2014-09-22
+% 第2章 - §9 - 演習問題 - @khibino
+
+
+第2章 - §9 - 演習問題 - 4.
+-----
+
+$$S_{ij} = \frac{x^{\gamma}}{\mathrm{LT}(f_i)} {\bf e}_i
+         - \frac{x^{\gamma}}{\mathrm{LT}(f_j)} {\bf e}_j
+  = \frac{1}{\mathrm{LC}(f_i)}\cdot\frac{x^{\gamma}}{\mathrm{LM}(f_i)} {\bf e}_i
+  - \frac{1}{\mathrm{LC}(f_j)}\cdot\frac{x^{\gamma}}{\mathrm{LM}(f_j)} {\bf e}_j$$
+
+$$= \frac{1}{\mathrm{LC}(f_i)}\cdot x^{\gamma - \mathrm{multideg}(f_i)} {\bf e}_i
+  - \frac{1}{\mathrm{LC}(f_j)}\cdot x^{\gamma - \mathrm{multideg}(f_j)} {\bf e}_j$$
+
+$$= ( \frac{1}{\mathrm{LC}(f_i)}\cdot x^{\gamma - \mathrm{multideg}(f_i)}
+    , \frac{1}{\mathrm{LC}(f_j)}\cdot x^{\gamma - \mathrm{multideg}(f_j)} )$$
+
+よって、定義6 において
+$c_i = \frac{1}{\mathrm{LC}(f_i)}, \alpha(i) = \gamma - \mathrm{multideg}(f_i)$ とすることで、
+$\gamma$次斉次の定義を満たす。
+
+
+第2章 - §9 - 演習問題 - 9.
+-----

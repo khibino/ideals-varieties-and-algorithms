@@ -7,30 +7,30 @@
 -----
 任意のイデアル$I \subset k[x_1,..,x_n]$ について有限部分集合であるグレブナ基底 $G = \{g_1,..,g_t\}$ が存在する。
 
-するとグレブナ基底の定義から、$<LT(g): g \in I - \{0\}> = <LT(I)> = <LT(g_1),..,LT(g_t)> $
-となり、$<LT(g): g \in I - \{0\}>$ が有限生成であることがわかる。
-ここで、$<LM(g): g \in I - \{0\}>$ を考えると $<LT(g): g \in I - \{0\}>$ とは定数倍しか異ならないことがわかり一致する。
+するとグレブナ基底の定義から、$<\mathrm{LT}(g): g \in I - \{0\}> = <\mathrm{LT}(I)> = <\mathrm{LT}(g_1),..,\mathrm{LT}(g_t)> $
+となり、$<\mathrm{LT}(g): g \in I - \{0\}>$ が有限生成であることがわかる。
+ここで、$<\mathrm{LM}(g): g \in I - \{0\}>$ を考えると $<\mathrm{LT}(g): g \in I - \{0\}>$ とは定数倍しか異ならないことがわかり一致する。
 
 第2章 - §5 - 演習問題 - 10. (1)
 -----
 
 $I$ が $f$ を生成元とする主イデアルであることから、任意の $g \in k[x_1,..,x_k], g \in I$ について、
-$h \in k[x_1,..,x_k], g = hf$。よって、$<LT(I)> = <LT(h)LT(f)> = <LT(f)>$。
+$h \in k[x_1,..,x_k], g = hf$。よって、$<\mathrm{LT}(I)> = <\mathrm{LT}(h)\mathrm{LT}(f)> = <\mathrm{LT}(f)>$。
 
 $f$ を含む $I$ の任意の有限部分集合の $f$ 以外の多項式を $f_1,..,f_s \in k[x_1,..,x_n]$ とする。
 $f$ は生成元なので、$h_1,..,h_s \in k[x_1,..,x_n]$ があって $f_i =  h_i f$。
-$<LT(f_1),..,LT(f_s),LT(f)>$ を考えると、
+$<\mathrm{LT}(f_1),..,\mathrm{LT}(f_s),\mathrm{LT}(f)>$ を考えると、
 
 
 第2章 - §5 - 演習問題 - 10. (2)
 -----
-$<LT(f_1),..,LT(f_s),LT(f)>$ を考えると、
+$<\mathrm{LT}(f_1),..,\mathrm{LT}(f_s),\mathrm{LT}(f)>$ を考えると、
 
-$= <LT(h_1)LT(f),..,LT(h_s)LT(f),LT(f)>$
+$= <\mathrm{LT}(h_1)\mathrm{LT}(f),..,\mathrm{LT}(h_s)\mathrm{LT}(f),\mathrm{LT}(f)>$
 
-$= <LT(f)>$
+$= <\mathrm{LT}(f)>$
 
-$= <LT(I)>$
+$= <\mathrm{LT}(I)>$
 
 なので、$\{f_1,..,f_s,f\}$ はグレブナ基底となる。これが示したかったことであった。
 

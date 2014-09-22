@@ -4,24 +4,38 @@ module Math.Polynomial.Algorithm.Grobner
        , BuchStep, buchbergerSteps'
        ) where
 
+import Data.Monoid ((<>))
 import Data.Maybe (catMaybes, mapMaybe)
 import Data.List (sortBy, tails)
 import Data.Function (on)
-import Control.Monad (foldM)
+import Control.Monad (foldM, when)
 import GHC.TypeLits (SingI)
 
 import Math.Polynomial.Ord (DegreeOrder, invCompare, ordGrLex)
 import Math.Polynomial.Data
-  (Polynomial, sPolynomial, polyNormalize, Mono, leadingMono, monoDiv, monoCompare)
+  (Polynomial, sPolynomial, polyNormalize, Mono, leadingMono, monoLcm, monoDiv, monoCompare)
 import Math.Polynomial.Algorithm.Division (polyQuotRem, remainder)
 
+
+monoCoPrime :: SingI n => Mono k n -> Mono k n -> Bool
+monoCoPrime m0 m1 = m0 <> m1 == monoLcm m0 m1
+
+needDivTest :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+            => Polynomial o k n
+            -> Polynomial o k n
+            -> Maybe (Polynomial o k n)
+needDivTest f0 f1 = do
+  m0 <- leadingMono f0
+  m1 <- leadingMono f1
+  when (monoCoPrime m0 m1) Nothing
+  sPolynomial f0 f1
 
 sPairs :: (Fractional k, Ord k, SingI n, DegreeOrder o)
        => [Polynomial o k n]
        -> [Polynomial o k n]
 sPairs fs =
   catMaybes [
-    sPolynomial f0 f1
+    needDivTest f0 f1
     | (f0, f1s) <- reverse . zip fs . tail . tails $ fs
     , f1 <- f1s
     ]
@@ -33,7 +47,7 @@ divLoop :: (Fractional k, Ord k, SingI n, DegreeOrder o)
 divLoop   []     ds  =  (ds, [])
 divLoop  (f:fs)  ds
   | r == 0         =  divLoop fs ds
-  | otherwise      =  (gs, mapMaybe (sPolynomial r) ds ++ rs)
+  | otherwise      =  (gs, mapMaybe (needDivTest r) ds ++ rs)
   where r = remainder $ f `polyQuotRem` ds
         (gs, rs) = divLoop fs (r:ds)
 

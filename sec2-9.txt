@@ -14,7 +14,9 @@ $$S_{ij} = \frac{x^{\gamma}}{\mathrm{LT}(f_i)} {\bf e}_i
 $$= \frac{1}{\mathrm{LC}(f_i)}\cdot x^{\gamma - \mathrm{multideg}(f_i)} {\bf e}_i
   - \frac{1}{\mathrm{LC}(f_j)}\cdot x^{\gamma - \mathrm{multideg}(f_j)} {\bf e}_j$$
 
-$$= ( \frac{1}{\mathrm{LC}(f_i)}\cdot x^{\gamma - \mathrm{multideg}(f_i)}
+$$= ( 0, ..., 0
+    , \frac{1}{\mathrm{LC}(f_i)}\cdot x^{\gamma - \mathrm{multideg}(f_i)}
+
     , \frac{1}{\mathrm{LC}(f_j)}\cdot x^{\gamma - \mathrm{multideg}(f_j)} )$$
 
 よって、定義6 において

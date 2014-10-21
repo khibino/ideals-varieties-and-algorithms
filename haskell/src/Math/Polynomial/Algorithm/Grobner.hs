@@ -1,5 +1,5 @@
 module Math.Polynomial.Algorithm.Grobner
-       ( sPairs, sPairCriterion
+       ( syzygyPairs, sPairCriterion
        , buchberger', reduce, buchberger
        , BuchStep, buchbergerSteps'
        ) where
@@ -30,10 +30,10 @@ needDivTest f0 f1 = do
   when (monoCoPrime m0 m1) Nothing
   syzygyPolynomial f0 f1
 
-sPairs :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-       => [Polynomial o k n]
-       -> [Polynomial o k n]
-sPairs fs =
+syzygyPairs :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+            => [Polynomial o k n]
+            -> [Polynomial o k n]
+syzygyPairs fs =
   catMaybes [
     needDivTest f0 f1
     | (f0, f1s) <- reverse . zip fs . tail . tails $ fs
@@ -54,18 +54,18 @@ divLoop  (f:fs)  ds
 sPairCriterion :: (Fractional k, Ord k, SingI n, DegreeOrder o)
              => [Polynomial o k n]
              -> Bool
-sPairCriterion fs = null . snd $ divLoop (sPairs fs) fs
+sPairCriterion fs = null . snd $ divLoop (syzygyPairs fs) fs
 
 buchberger' :: (Fractional k, Ord k, SingI n, DegreeOrder o)
             => [Polynomial o k n]
             -> [Polynomial o k n]
 buchberger'       []   =  []
-buchberger' fs@(_:_)  =  loop (sPairs fs) fs where
+buchberger' fs@(_:_)  =  loop (syzygyPairs fs) fs where
   loop sps ds0
     | rsps == []  =  ds1
     | otherwise   =  loop rsps ds1
     where (ds1, rsps) = divLoop sps ds0
-  -- (gbs, ys)  =  divLoop (sPairs fs ++ ys) fs
+  -- (gbs, ys)  =  divLoop (syzygyPairs fs ++ ys) fs
 
 type BuchStep o k n = ([Polynomial o k n], (Polynomial o k n, Polynomial o k n))
 
@@ -84,7 +84,7 @@ buchbergerSteps' :: (Fractional k, Ord k, SingI n, DegreeOrder o)
                  => [Polynomial o k n]
                  -> ([Polynomial o k n], [[BuchStep o k n]])
 buchbergerSteps'       []  =  ([], [])
-buchbergerSteps' fs@(_:_)  =  loop (sPairs fs) fs where
+buchbergerSteps' fs@(_:_)  =  loop (syzygyPairs fs) fs where
   loop sps ds0
     | rsps == []  =  (ds1, [])
     | otherwise   =  let (gs, st) = loop rsps ds1 in (gs, steps : st)

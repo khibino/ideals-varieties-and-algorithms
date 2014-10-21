@@ -12,7 +12,7 @@ module Math.Polynomial.Data
 
        , Polynomial, GPolynomial, terms, polynomial
        , unsafePolynomial, unsafeMapPoly
-       , polyPlus, polyMult, polySubt, polyNegate, sPolynomial
+       , polyPlus, polyMult, polySubt, polyNegate, syzygyPolynomial
        , Polynomial1
        , polyUncons, leadingTerm, leadingMono, leadingCoeff, multiDegree
        , polyNormalize
@@ -302,11 +302,11 @@ polyNormalize p = maybe p id $ do
   lc <- leadingCoeff p
   return $ unsafeMapPoly (`coeffDiv` lc) p
 
-sPolynomial :: (Fractional k, Ord k, SingI n, DegreeOrder o)
-            => Polynomial o k n
-            -> Polynomial o k n
-            -> Maybe (Polynomial o k n)
-sPolynomial f g = do
+syzygyPolynomial :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+                 => Polynomial o k n
+                 -> Polynomial o k n
+                 -> Maybe (Polynomial o k n)
+syzygyPolynomial f g = do
   ltF <- leadingTerm f
   ltG <- leadingTerm g
   let lcmT = termLcm ltF ltG

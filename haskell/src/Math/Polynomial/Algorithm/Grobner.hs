@@ -13,7 +13,7 @@ import GHC.TypeLits (SingI)
 
 import Math.Polynomial.Ord (DegreeOrder, invCompare, ordGrLex)
 import Math.Polynomial.Data
-  (Polynomial, sPolynomial, polyNormalize, Mono, leadingMono, monoLcm, monoDiv, monoCompare)
+  (Polynomial, syzygyPolynomial, polyNormalize, Mono, leadingMono, monoLcm, monoDiv, monoCompare)
 import Math.Polynomial.Algorithm.Division (polyQuotRem, remainder)
 
 
@@ -28,7 +28,7 @@ needDivTest f0 f1 = do
   m0 <- leadingMono f0
   m1 <- leadingMono f1
   when (monoCoPrime m0 m1) Nothing
-  sPolynomial f0 f1
+  syzygyPolynomial f0 f1
 
 sPairs :: (Fractional k, Ord k, SingI n, DegreeOrder o)
        => [Polynomial o k n]
@@ -76,7 +76,7 @@ divLoopSteps :: (Fractional k, Ord k, SingI n, DegreeOrder o)
 divLoopSteps   []     ds  =  (ds, [])
 divLoopSteps  (f:fs)  ds
   | r == 0         =  divLoopSteps fs ds
-  | otherwise      =  (gs, (mapMaybe (sPolynomial r) ds, (f, r)) : rs)
+  | otherwise      =  (gs, (mapMaybe (syzygyPolynomial r) ds, (f, r)) : rs)
   where r = remainder $ f `polyQuotRem` ds
         (gs, rs) = divLoopSteps fs (r:ds)
 

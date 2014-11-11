@@ -112,3 +112,17 @@ buchberger :: (Fractional k, Ord k, SingI n, DegreeOrder o)
            => [Polynomial o k n]
            -> [Polynomial o k n]
 buchberger =  reduce . buchberger'
+
+
+syzygyPairsIx :: (Fractional k, Ord k, SingI n, DegreeOrder o)
+              => [Polynomial o k n]
+              -> [((Int, Int), Polynomial o k n)]
+syzygyPairsIx fs =
+  catMaybes [
+    do sp <- needDivTest f0 f1
+       return ((i, j), sp)
+    | ((i, f0), f1s) <- reverse . zip ifs . tail . tails $ ifs
+    , (j, f1) <- f1s
+    ]
+  where (is, ris) = splitAt (length fs) [0..]
+        ifs = zip is fs

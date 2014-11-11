@@ -1,0 +1,27 @@
+% グレブナ規定と代数多様体入門
+% 2014-11-21
+% 第3章 - §2 - 演習問題 - @khibino
+
+第3章 - §2 - 演習問題 - 4.
+------
+
+$$I_1 = <f_1, \dots, f_s, g_1, \dots, g_s>, I_2 = <\tilde{f}_1, \dots, \tilde{f}_s, g_1, \dots, g_s>$$
+
+$$ h'_1, \dots h'_{2s} \in k[x_1,\dots ,x_n], h''_1, \dots h''_{2s} \in k[x_1,\dots ,x_n] $$
+
+$$ e_2 = h''_1 \tilde{f}_1 + \dots + h''_s \tilde{f}_s + h''_{s+1} g_1 + \dots + h''_{2s} g_s \in I_2 $$
+
+$$ h'_k = h''_k$$
+
+$$ h'_{s+k} = h_k h''_k + h''_{s+k} $$
+
+$$ e_2 \in I_2 \Rightarrow e_2 \in I_1 $$
+
+
+$$ e_1 = h'_1 f_1 + \dots + h'_s f_s + h'_{s+1} g_1 + \dots + h'_{2s} g_s \in I_1 $$
+
+$$ h''_k = h'_k$$
+
+$$ h''_{s+k} = h'_{s+k} - h_k h'_k  $$
+
+$$ e_1 \in I_1 \Rightarrow e_1 \in I_2 $$

@@ -10,7 +10,7 @@ module Math.Polynomial.Data
        , Var, varNum
        , Variables, variables, varc, fieldVariables', fieldVariables
 
-       , Polynomial, GPolynomial, terms, polynomial
+       , Polynomial, GPolynomial, terms, polynomial, constant
        , unsafePolynomial, unsafeMapPoly
        , polyPlus, polyMult, polySubt, polyNegate, syzygyPolynomial
        , Polynomial1
@@ -236,6 +236,9 @@ polyMergeTermLists o =  polyAggregateTerms . mergeTermLists o
 
 polynomial :: (Ord k, Num k, DegreeOrder o) => [Term k n] -> Polynomial o k n
 polynomial =  polySortTerms
+
+constant :: (Ord k, Num k, DegreeOrder o, SingI n) => k -> Polynomial o k n
+constant =  polynomial . (:[]) . (`term` [])
 
 polyPlus :: (Ord k, Num k, DegreeOrder o)
          => Polynomial o k n

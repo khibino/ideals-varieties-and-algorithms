@@ -16,7 +16,8 @@ targets = \
 	sec2-9-s5-gl.html \
 	sec3-1-s5-gl.html \
 	sec3-2-s5-gl.html \
-	sec3-3-s5-gl.html
+	sec3-3-s5-gl.html \
+	sec3-4-s5-gl.html
 
 
 md_format = \

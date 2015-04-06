@@ -169,9 +169,9 @@ sec4_18_A4 = 697 - 288 * "x"^2 + 108 * "y" - 336 * "y"^2 + 64 * "y"^3
 
 sec4_18_A234 :: [Polynomial GrLex Rational 3]
 sec4_18_A234 =
-  [ 7327 - 1928 * "y" - 768 * "y"^2 - 896 * "y"^3 + 256 * "y"^4        --  A2
-  , 431 * "x" - 12 * "x" * "y" - 48 * "x" * "y"^2 - 64 * "x" * "y"^3   --  A3
-  , 697 - 288 * "x"^2 + 108 * "y" - 336 * "y"^2 + 64 * "y"^3           --  A4
+  [ sec4_18_A2
+  , sec4_18_A3
+  , sec4_18_A4
   ]
 
 sec4_18_A234_grLex :: [Polynomial GrLex Rational 3]
@@ -197,6 +197,7 @@ sec4_18_singular_equation :: [Polynomial GrLex Rational 3]
 sec4_18_singular_equation  =
   [ sec4_18_g1, sec4_18_dg1dx, sec4_18_dg1dy ]
 
+{- g₁, 𝟃(g₁)/𝟃x, 𝟃(g₁)/𝟃y ∈ ⟨A₂, A₃, A₄⟩ -}
 sec4_18_singular_left :: Bool
 sec4_18_singular_left =
   all (== 0)
@@ -207,9 +208,15 @@ sec4_18_singular_left =
 sec4_18_singular_equation_grLex :: [Polynomial GrLex Rational 3]
 sec4_18_singular_equation_grLex = buchberger sec4_18_singular_equation
 
+{- ⟨g₁, 𝟃(g₁)/𝟃x, 𝟃(g₁)/𝟃y⟩ ∋ A₂^2, A₃^2, A₄^2 -}
 sec4_18_singular_right :: Bool
 sec4_18_singular_right =
   all (== 0)
   [ remainder $ a^2 /. sec4_18_singular_equation_grLex
   | a <- sec4_18_A234
   ]
+
+{- A₂ ∉ ⟨g₁, 𝟃(g₁)/𝟃x, 𝟃(g₁)/𝟃y⟩ -}
+sec4_18_A2_in :: Bool
+sec4_18_A2_in =
+  not $ remainder (sec4_18_A2 /. sec4_18_singular_equation_grLex) == 0

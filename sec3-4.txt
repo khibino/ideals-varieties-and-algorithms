@@ -162,3 +162,5 @@ $$x = \pm\frac{1}{2}\sqrt{15 + 6 \sqrt[3]{2} - 12 \sqrt[3]{4}}$$
 
 第3章 - §4 - 演習問題 - 18.
 ------
+
+haskell実装の Math.Polynomial.Examples.Chapter3

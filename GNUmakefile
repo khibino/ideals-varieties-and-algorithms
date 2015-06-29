@@ -17,11 +17,12 @@ targets = \
 	sec3-1-s5-gl.html \
 	sec3-2-s5-gl.html \
 	sec3-3-s5-gl.html \
-	sec3-4-s5-gl.html
+	sec3-4-s5-gl.html \
+	sec3-5-s5-gl.html
 
 
 md_format = \
-	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_dollars+latex_macros+fenced_code_blocks
+	markdown+pandoc_title_block+pipe_tables+table_captions+escaped_line_breaks+implicit_figures+strikeout+tex_math_single_backslash+tex_math_dollars+latex_macros+fenced_code_blocks
 
 math_opt = --latexmathml
 #math_opt = --jsmath

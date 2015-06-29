@@ -220,3 +220,24 @@ sec4_18_singular_right =
 sec4_18_A2_in :: Bool
 sec4_18_A2_in =
   not $ remainder (sec4_18_A2 /. sec4_18_singular_equation_grLex) == 0
+
+sec5_9_f :: Polynomial GrLex Rational 3
+sec5_9_f = 6 * "x"^4 - 23 * "x"^3 + 32 * "x"^2 - 19 * "x" + 4
+
+sec5_9_f' :: Polynomial GrLex Rational 3
+sec5_9_f' = 24 * "x"^3 - 69 * "x"^2 + 64 * "x"   - 19
+
+sec5_9_gcd :: [Polynomial GrLex Rational 3]
+sec5_9_gcd = buchberger [ sec5_9_f, sec5_9_f' ]
+
+sec5_9_div :: [Polynomial GrLex Rational 3]
+sec5_9_div = do
+  pq0 <- quots $ sec5_9_f /. sec5_9_gcd
+  let q0 = quotient pq0
+  pq1 <- quots $ q0 /. ["x" - 1]
+  [quotient pq1]
+
+sec5_9_check :: Polynomial GrLex Rational 3
+sec5_9_check = (6 * "x"^2 - 11 * "x" + 4) * ("x" - 1) * ("x" - 1)
+
+-- PolyQuot PolyQuotsRem (/.)

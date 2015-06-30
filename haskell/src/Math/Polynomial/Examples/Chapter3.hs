@@ -221,6 +221,15 @@ sec4_18_A2_in :: Bool
 sec4_18_A2_in =
   not $ remainder (sec4_18_A2 /. sec4_18_singular_equation_grLex) == 0
 
+sec5_6_ex_f :: Polynomial GrLex Rational 3
+sec5_6_ex_f = "x"^4 + "x"^2 + 1
+
+sec5_6_ex_f' :: Polynomial GrLex Rational 3
+sec5_6_ex_f' = 4 * "x"^3 + 2 * "x"
+
+sec5_6_ex :: [Polynomial GrLex Rational 3]
+sec5_6_ex = buchberger [ sec5_6_ex_f, sec5_6_ex_f' ]
+
 sec5_9_f :: Polynomial GrLex Rational 3
 sec5_9_f = 6 * "x"^4 - 23 * "x"^3 + 32 * "x"^2 - 19 * "x" + 4
 

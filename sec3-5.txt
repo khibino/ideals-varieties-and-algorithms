@@ -30,6 +30,9 @@ $gh$ の $x^{i+j}$ の係数は $\sum_{p+q = i+j} a_p b_q$ となる。
 第3章 - §5 - 演習問題 - 6.
 ------
 
+$f_1, \dots ,f_l$ がそれぞれ $\sum_j^{l} f_1 \cdots f_j' \cdots f_l$ と互いに素なので、
+$f_1 \cdots f_l$ と $\sum_j^{l} f_1 \cdots f_j' \cdots f_l$ が互いに素
+
 第3章 - §5 - 演習問題 - 9.
 ------
 

@@ -4,6 +4,7 @@ module Math.Polynomial.Imports
        , module Math.Polynomial.Data
        , module Math.Polynomial.Algorithm.Division
        , module Math.Polynomial.Algorithm.Grobner
+       , module Math.Polynomial.Algorithm.Det
        , module Math.Polynomial.Combinator
        , module Math.Polynomial.Pretty
        ) where
@@ -13,5 +14,6 @@ import Math.Polynomial.Ord
 import Math.Polynomial.Data
 import Math.Polynomial.Algorithm.Division
 import Math.Polynomial.Algorithm.Grobner
+import Math.Polynomial.Algorithm.Det
 import Math.Polynomial.Combinator
 import Math.Polynomial.Pretty

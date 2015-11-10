@@ -336,3 +336,84 @@ sec6_1_y_syl =
 
 sec6_1_y_res :: Polynomial Lex Rational 3
 sec6_1_y_res = det sec6_1_y_syl
+
+sec6_3_a_f :: Polynomial Lex Rational 3
+sec6_3_a_f = "x" * "y" - 1
+
+sec6_3_a_g :: Polynomial Lex Rational 3
+sec6_3_a_g = "x"^2 + "y"^2 - 4
+
+sec6_3_a_lex :: [Polynomial Lex Rational 3]
+sec6_3_a_lex = buchberger [sec6_3_a_f, sec6_3_a_g]
+
+sec6_3_a_I1 :: [Polynomial Lex Rational 3]
+sec6_3_a_I1 = ["y"^4 + (-4) * "y"^2 + 1]
+
+sec6_3_a_xa0 :: Polynomial Lex Rational 3
+sec6_3_a_xa0 = "y"
+
+sec6_3_a_xa1 :: Polynomial Lex Rational 3
+sec6_3_a_xa1 = -1
+
+sec6_3_a_xb0 :: Polynomial Lex Rational 3
+sec6_3_a_xb0 = 1
+
+sec6_3_a_xb1 :: Polynomial Lex Rational 3
+sec6_3_a_xb1 = 0
+
+sec6_3_a_xb2 :: Polynomial Lex Rational 3
+sec6_3_a_xb2 = "y"^2 - 4
+
+sec6_3_a_syl :: [[Polynomial Lex Rational 3]]
+sec6_3_a_syl =
+  [ [ sec6_3_a_xa0,            0, sec6_3_a_xb0]
+  , [ sec6_3_a_xa1, sec6_3_a_xa0, sec6_3_a_xb1]
+  , [            0, sec6_3_a_xa1, sec6_3_a_xb2]
+  ]
+
+sec6_3_a_res :: Polynomial Lex Rational 3
+sec6_3_a_res = det sec6_3_a_syl
+
+sec6_3_a :: Bool
+sec6_3_a = buchberger [ sec6_3_a_res ] == sec6_3_a_I1
+
+
+sec6_3_b_f :: Polynomial Lex Rational 3
+sec6_3_b_f = "x" * "y" - 1
+
+sec6_3_b_g :: Polynomial Lex Rational 3
+sec6_3_b_g = "x"^2 * "y" + "y"^2 - 4
+
+sec6_3_b_lex :: [Polynomial Lex Rational 3]
+sec6_3_b_lex = buchberger [sec6_3_b_f, sec6_3_b_g]
+
+sec6_3_b_I1 :: [Polynomial Lex Rational 3]
+sec6_3_b_I1 = [ "y"^3 + (-4) * "y" + 1 ]
+
+sec6_3_b_xa0 :: Polynomial Lex Rational 3
+sec6_3_b_xa0 = "y"
+
+sec6_3_b_xa1 :: Polynomial Lex Rational 3
+sec6_3_b_xa1 = -1
+
+sec6_3_b_xb0 :: Polynomial Lex Rational 3
+sec6_3_b_xb0 = "y"
+
+sec6_3_b_xb1 :: Polynomial Lex Rational 3
+sec6_3_b_xb1 = 0
+
+sec6_3_b_xb2 :: Polynomial Lex Rational 3
+sec6_3_b_xb2 = "y"^2 - 4
+
+sec6_3_b_syl :: [[Polynomial Lex Rational 3]]
+sec6_3_b_syl =
+  [ [ sec6_3_b_xa0,            0, sec6_3_b_xb0]
+  , [ sec6_3_b_xa1, sec6_3_b_xa0, sec6_3_b_xb1]
+  , [            0, sec6_3_b_xa1, sec6_3_b_xb2]
+  ]
+
+sec6_3_b_res :: Polynomial Lex Rational 3
+sec6_3_b_res = det sec6_3_b_syl
+
+sec6_3_b :: Bool
+sec6_3_b = buchberger [ sec6_3_b_res ] == sec6_3_b_I1

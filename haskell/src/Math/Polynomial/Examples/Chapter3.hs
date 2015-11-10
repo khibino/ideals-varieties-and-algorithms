@@ -250,3 +250,89 @@ sec5_9_check :: Polynomial GrLex Rational 3
 sec5_9_check = (6 * "x"^2 - 11 * "x" + 4) * ("x" - 1) * ("x" - 1)
 
 -- PolyQuot PolyQuotsRem (/.)
+
+sec6_1_f :: Polynomial Lex Rational 3
+sec6_1_f = "x"^2 * "y" - 3 * "x" * "y"^2 + "x"^2 - 3 * "x" * "y"
+
+sec6_1_g :: Polynomial Lex Rational 3
+sec6_1_g = "x"^3 * "y" + "x"^3 - 4 * "y"^2 - 3 * "y" + 1
+
+sec6_1_fx :: Polynomial Lex Rational 3
+sec6_1_fx = ("y" + 1) * "x"^2 + (-3 * "y"^2 - 3 * "y") * "x"
+
+sec6_1_gx :: Polynomial Lex Rational 3
+sec6_1_gx = ("y" + 1) * "x"^3 - 4 * "y"^2 - 3 * "y" + 1
+
+xa0 :: Polynomial Lex Rational 3
+xa0 = "y" + 1
+
+xa1 :: Polynomial Lex Rational 3
+xa1 = -3 * "y"^2 - 3 * "y"
+
+xa2 :: Polynomial Lex Rational 3
+xa2 = 0
+
+xb0 :: Polynomial Lex Rational 3
+xb0 = ("y" + 1)
+
+xb1 :: Polynomial Lex Rational 3
+xb1 = 0
+
+xb2 :: Polynomial Lex Rational 3
+xb2 = 0
+
+xb3 :: Polynomial Lex Rational 3
+xb3 =  - 4 * "y"^2 - 3 * "y" + 1
+
+sec6_1_x_syl :: [[Polynomial Lex Rational 3]]
+sec6_1_x_syl =
+  [ [ xa0,   0,   0, xb0,   0 ]
+  , [ xa1, xa0,   0, xb1, xb0 ]
+  , [ xa2, xa1, xa0, xb2, xb1 ]
+  , [   0, xa2, xa1, xb3, xb2 ]
+  , [   0,  0,  xa2,   0, xb3 ]
+  ]
+
+sec6_1_x_res :: Polynomial Lex Rational 3
+sec6_1_x_res = det sec6_1_x_syl
+
+-- sec6_1_f :: Polynomial Lex Rational 3
+-- sec6_1_f = "x"^2 * "y" - 3 * "x" * "y"^2 + "x"^2 - 3 * "x" * "y"
+
+-- sec6_1_g :: Polynomial Lex Rational 3
+-- sec6_1_g = "x"^3 * "y" + "x"^3 - 4 * "y"^2 - 3 * "y" + 1
+
+sec6_1_fy :: Polynomial Lex Rational 3
+sec6_1_fy = - 3 * "x" * "y"^2 + ("x"^2 - 3 * "x") * "y" + "x"^2
+
+sec6_1_gy :: Polynomial Lex Rational 3
+sec6_1_gy = -4 * "y"^2 + ("x"^3 - 3) * "y" + "x"^3 + 1
+
+ya0 :: Polynomial Lex Rational 3
+ya0 = - 3 * "x"
+
+ya1 :: Polynomial Lex Rational 3
+ya1 = "x"^2 - 3 * "x"
+
+ya2 :: Polynomial Lex Rational 3
+ya2 = "x"^2
+
+yb0 :: Polynomial Lex Rational 3
+yb0 = -4
+
+yb1 :: Polynomial Lex Rational 3
+yb1 = "x"^3 - 3
+
+yb2 :: Polynomial Lex Rational 3
+yb2 = "x"^3 + 1
+
+sec6_1_y_syl :: [[Polynomial Lex Rational 3]]
+sec6_1_y_syl =
+  [ [ ya0,   0, yb0,   0 ]
+  , [ ya1, ya0, yb1, yb0 ]
+  , [ ya2, ya1, yb2, yb1 ]
+  , [   0, ya2,   0, yb2 ]
+  ]
+
+sec6_1_y_res :: Polynomial Lex Rational 3
+sec6_1_y_res = det sec6_1_y_syl

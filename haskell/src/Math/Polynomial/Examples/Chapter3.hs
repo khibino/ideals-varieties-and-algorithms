@@ -417,3 +417,14 @@ sec6_3_b_res = det sec6_3_b_syl
 
 sec6_3_b :: Bool
 sec6_3_b = buchberger [ sec6_3_b_res ] == sec6_3_b_I1
+
+
+sec6_6_b_f :: Polynomial Lex Rational 3
+sec6_6_b_f = "x"^5 - 2 * "x"^3 - 2 * "x"^2 + 4
+
+sec6_6_b_g :: Polynomial Lex Rational 3
+sec6_6_b_g = x^5 + 5 * "x"^4 + 8 * x^3 + 2 * x^2 - 5 * x + 1
+  where x = "y" + "x"
+
+sec6_6_G :: [Polynomial Lex Rational 3]
+sec6_6_G = buchberger [sec6_6_b_f, sec6_6_b_g]
